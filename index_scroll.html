@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新北英語學扶數位資源庫</title>
+    <style>
+
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;900&display=swap');
+
+    :root {
+        --primary: #6366f1;
+        --primary-dark: #4f46e5;
+        --primary-light: #e0e7ff;
+        --text-main: #1e293b;
+        --text-muted: #64748b;
+        --bg-main: #f1f5f9;
+        --bg-card: #ffffff;
+        --border-color: #e2e8f0;
+        --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.08);
+        --shadow-md: 0 4px 12px -2px rgb(0 0 0 / 0.12);
+        --radius: 0.5rem;
+        --font-size-base: 16px;
+    }
+    body {
+        font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+        background-color: var(--bg-main);
+        color: var(--text-main);
+        font-size: var(--font-size-base);
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+        -webkit-font-smoothing: antialiased;
+    }
+    a {
+        color: var(--primary-dark);
+        text-decoration: none;
+        transition: color 0.15s ease;
+        font-weight: 500;
+    }
+    a:hover { color: var(--primary); text-decoration: underline; }
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.2rem 0.6rem;
+        border-radius: 9999px;
+        background: var(--primary-light);
+        color: var(--primary-dark);
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        margin-right: 0.6rem;
+        white-space: nowrap;
+    }
+    .resource-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius);
+        padding: 0.85rem 1.1rem;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+        box-shadow: var(--shadow-sm);
+        transition: all 0.2s ease;
+        position: relative;
+        overflow: hidden;
+        border-left: 3px solid transparent;
+    }
+    .resource-card:hover {
+        border-left-color: var(--primary);
+        box-shadow: var(--shadow-md);
+        transform: translateX(3px);
+        background: #fdfdff;
+    }
+    .resource-title {
+        font-weight: 600;
+        font-size: 1rem;
+        margin-bottom: 0.4rem;
+        display: flex;
+        align-items: center;
+        color: var(--text-main);
+    }
+    header {
+        background: white;
+        border-bottom: 1px solid var(--border-color);
+        padding: 1rem 2rem;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        box-shadow: var(--shadow-sm);
+    }
+    h1 { margin: 0; font-size: 1.4rem; color: var(--primary); }
+
+        /* ===================== LAYOUT ===================== */
+        .layout {
+            display: flex;
+            height: calc(100vh - 70px);
+            overflow: hidden;
+            margin-top: 70px;
+            background-color: var(--bg-main);
+        }
+
+        /* ===================== TOP HEADER ===================== */
+        .top-header {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 2rem;
+            z-index: 50;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+            height: 70px;
+        }
+        .top-header h1 {
+            font-size: 1.5rem;
+            margin: 0;
+            font-weight: 900;
+            background: linear-gradient(120deg, var(--primary), #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
+        }
+        .top-header .editors {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-align: right;
+            line-height: 1.5;
+            background: var(--bg-main);
+            padding: 0.3rem 0.85rem;
+            border-radius: 9999px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* ===================== SIDEBAR ===================== */
+        .sidebar {
+            width: 260px;
+            background: white;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            flex-shrink: 0;
+        }
+        .sidebar-nav {
+            overflow-y: auto;
+            padding: 1rem 0;
+            flex-grow: 1;
+        }
+        .nav-grade {
+            padding: 0.6rem 1.25rem 0.2rem;
+            font-weight: 800;
+            color: var(--text-main);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.06em;
+            margin-top: 0.75rem;
+        }
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.55rem 1.25rem 0.55rem 2.25rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.15s ease;
+            border-left: 3px solid transparent;
+            line-height: 1.4;
+        }
+        .nav-link:hover {
+            background: var(--bg-main);
+            color: var(--primary-dark);
+            text-decoration: none;
+            border-left-color: var(--primary);
+        }
+        .nav-link.active {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            border-left-color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* ===================== MAIN CONTENT ===================== */
+        .main-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 1.75rem 2.5rem;
+            background: var(--bg-main);
+            scroll-behavior: smooth;
+        }
+        .content-container {
+            max-width: 860px;
+            margin: 0 auto;
+        }
+
+        /* ---- Grade ---- */
+        .grade-section { margin-bottom: 2.5rem; }
+        .grade-title {
+            font-size: 1.6rem;
+            font-weight: 900;
+            padding-bottom: 0.6rem;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+            border-bottom: 2px solid var(--border-color);
+            position: relative;
+            margin-top: 0;
+        }
+        .grade-title::after {
+            content: '';
+            position: absolute;
+            bottom: -2px; left: 0;
+            width: 50px; height: 2px;
+            background: var(--primary);
+        }
+
+        /* ---- Domain (1st level collapsible) ---- */
+        .domain-section {
+            margin-bottom: 0.6rem;
+            background: white;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+        .domain-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 0;
+            padding: 0.85rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: background 0.15s;
+            list-style: none;
+            user-select: none;
+        }
+        .domain-title:hover { background: var(--bg-main); }
+        .domain-section[open] .domain-title {
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-main);
+        }
+        .domain-body { padding: 1rem 1.25rem; }
+
+        /* ---- Type (2nd level collapsible) ---- */
+        .type-section {
+            margin-bottom: 0.5rem;
+            border-left: 3px solid var(--primary-light);
+            border-radius: 0 var(--radius) var(--radius) 0;
+            background: #fafbff;
+            overflow: hidden;
+        }
+        .type-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            padding: 0.6rem 1rem;
+            margin: 0;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: background 0.15s, color 0.15s;
+            user-select: none;
+        }
+        .type-title:hover { background: var(--primary-light); color: var(--primary-dark); }
+        .type-section[open] .type-title {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            border-bottom: 1px solid #c7d2fe;
+        }
+        .type-body { padding: 0.6rem 0.75rem; }
+
+        /* ---- Unit (3rd level collapsible) ---- */
+        .unit-section { margin-bottom: 0.4rem; }
+        .unit-title {
+            font-size: 0.9rem;
+            color: var(--text-main);
+            font-weight: 600;
+            margin-bottom: 0;
+            background: transparent;
+            padding: 0.45rem 0.75rem;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            cursor: pointer;
+            list-style: none;
+            transition: background 0.15s;
+            user-select: none;
+        }
+        .unit-title:hover { background: #e0e7ff50; }
+        .unit-body { padding-left: 1.25rem; padding-top: 0.3rem; }
+
+        /* ---- Resource Card ---- */
+        .resource-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-left: 3px solid transparent;
+            border-radius: var(--radius);
+            padding: 0.7rem 1rem;
+            margin-top: 0.35rem;
+            margin-bottom: 0.35rem;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.15s ease;
+        }
+        .resource-card:hover {
+            border-left-color: var(--primary);
+            box-shadow: var(--shadow-md);
+            transform: translateX(2px);
+        }
+        .resource-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 0.3rem;
+            display: flex;
+            align-items: center;
+            color: var(--text-main);
+        }
+
+        /* ---- Hint Bar ---- */
+        .sticky-search-hint {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            padding: 0.65rem 1rem;
+            border-radius: var(--radius);
+            margin-bottom: 1.25rem;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+    /* ===================== HAMBURGER BUTTON ===================== */
+    .hamburger-btn {
+        display: none;
+        background: none;
+        border: 1px solid var(--border-color);
+        cursor: pointer;
+        padding: 0.4rem 0.5rem;
+        border-radius: var(--radius);
+        color: var(--text-main);
+        flex-direction: column;
+        gap: 5px;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    .hamburger-btn span {
+        display: block;
+        width: 20px;
+        height: 2px;
+        background: currentColor;
+        border-radius: 2px;
+    }
+
+    /* ===================== SIDEBAR OVERLAY ===================== */
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        top: 70px;
+        background: rgba(0, 0, 0, 0.35);
+        z-index: 39;
+    }
+    .sidebar-overlay.open { display: block; }
+
+    /* ===================== LOADING ===================== */
+    #loading-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 4rem 2rem;
+        gap: 1rem;
+        color: var(--text-muted);
+    }
+    .spinner {
+        width: 2.5rem;
+        height: 2.5rem;
+        border: 3px solid var(--primary-light);
+        border-top-color: var(--primary);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #error-container {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #b91c1c;
+        border-radius: var(--radius);
+        padding: 1.25rem 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    /* ===================== 回到頂部按鈕 ===================== */
+    #back-to-top {
+        position: fixed;
+        bottom: 1.5rem;
+        right: 1.5rem;
+        width: 2.75rem;
+        height: 2.75rem;
+        border-radius: 50%;
+        background: var(--primary);
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-size: 1.2rem;
+        box-shadow: 0 4px 12px rgba(99,102,241,0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s ease, transform 0.25s ease;
+        z-index: 100;
+    }
+    #back-to-top.visible {
+        opacity: 1;
+        pointer-events: auto;
+    }
+    #back-to-top:hover { transform: translateY(-3px); }
+
+    /* ===================== 純文字提示（無連結）樣式 ===================== */
+    .resource-card.no-link {
+        background: #fafafa;
+        border-left-color: #cbd5e1;
+        opacity: 0.82;
+    }
+    .resource-card.no-link .resource-title { color: var(--text-muted); }
+    .hint-label {
+        display: inline-block;
+        font-size: 0.75rem;
+        color: #94a3b8;
+        background: #f1f5f9;
+        border: 1px solid #e2e8f0;
+        border-radius: 9999px;
+        padding: 0.1rem 0.55rem;
+        margin-top: 0.25rem;
+    }
+
+
+    /* ===================== TABLET (768px – 1024px) ===================== */
+    @media (max-width: 1024px) and (min-width: 768px) {
+        .sidebar { width: 210px; }
+        .main-content { padding: 1.25rem 1.5rem; }
+        .top-header .editors { font-size: 0.78rem; padding: 0.25rem 0.6rem; }
+    }
+
+    /* ===================== MOBILE (< 768px) ===================== */
+    @media (max-width: 767px) {
+        .top-header {
+            padding: 0 0.85rem;
+            gap: 0.5rem;
+        }
+        .top-header h1 { font-size: 1rem; letter-spacing: 0; }
+        .top-header .editors { display: none; }
+        .hamburger-btn { display: flex; }
+
+        .sidebar {
+            position: fixed;
+            left: -270px;
+            top: 70px;
+            width: 260px;
+            height: calc(100vh - 70px);
+            z-index: 40;
+            transition: left 0.25s ease;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.15);
+        }
+        .sidebar.open { left: 0; }
+
+        .layout { height: calc(100vh - 70px); }
+        .main-content { padding: 1rem; }
+        .content-container { max-width: 100%; }
+        .resource-title { flex-wrap: wrap; }
+        .badge { margin-bottom: 0.2rem; }
+    }
+
+    /* ===================== NOTIFICATION MODAL ===================== */
+    .bell-btn {
+        background: white; border: 1px solid var(--border-color); font-size: 1.1rem; cursor: pointer; color: var(--text-main);
+        position: relative; padding: 0.4rem 0.6rem; border-radius: 50%; transition: transform 0.2s;
+        display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-sm);
+    }
+    .bell-btn:hover { transform: scale(1.05); background: #f8fafc; }
+    .bell-badge {
+        position: absolute; top: -2px; right: -2px; width: 12px; height: 12px;
+        background: #ef4444; border-radius: 50%; display: none; border: 2px solid white;
+    }
+    .bell-badge.active { display: block; animation: pulse 2s infinite; }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239,68,68,0.7); } 70% { box-shadow: 0 0 0 6px rgba(239,68,68,0); } 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); } }
+    
+    .modal-overlay {
+        position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999;
+        display: none; align-items: center; justify-content: center; backdrop-filter: blur(2px);
+    }
+    .modal-overlay.open { display: flex; }
+    .changelog-modal {
+        background: white; width: 90%; max-width: 550px; max-height: 80vh;
+        border-radius: 12px; display: flex; flex-direction: column; overflow: hidden;
+        box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+    }
+    .modal-header {
+        padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-color);
+        display: flex; justify-content: space-between; align-items: center; background: #f8fafc;
+    }
+    .modal-header h2 { margin: 0; font-size: 1.25rem; color: var(--text-main); display: flex; align-items: center; gap: 8px;}
+    .close-btn { background: none; border: none; font-size: 1.75rem; cursor: pointer; color: var(--text-muted); line-height: 1; }
+    .close-btn:hover { color: #ef4444; }
+    .modal-body { padding: 1.5rem; overflow-y: auto; }
+    .log-item { margin-bottom: 1.25rem; padding-bottom: 1.25rem; border-bottom: 1px dashed var(--border-color); }
+    .log-item:last-child { margin-bottom: 0; border-bottom: none; padding-bottom: 0; }
+    .log-meta { display: flex; gap: 8px; margin-bottom: 8px; align-items: center; font-size: 0.85rem; flex-wrap: wrap; }
+    .log-date { color: #64748b; font-weight: 600; background: #f1f5f9; padding: 2px 6px; border-radius: 4px;}
+    .log-content { color: var(--text-main); line-height: 1.6; }
+    
+    .lbl-new { background: #dcfce7; color: #166534; padding: 2px 6px; border-radius: 4px; font-weight: 700; white-space: nowrap;}
+    .lbl-fix { background: #fef08a; color: #854d0e; padding: 2px 6px; border-radius: 4px; font-weight: 700; white-space: nowrap;}
+    .lbl-ann { background: #e0e7ff; color: #3730a3; padding: 2px 6px; border-radius: 4px; font-weight: 700; white-space: nowrap;}
+
+    </style>
+</head>
+<body>
+    <header class="top-header">
+        <button class="hamburger-btn" id="hamburgerBtn" aria-label="開啟目錄">
+            <span></span><span></span><span></span>
+        </button>
+        <div>
+            <h1>新北英語學扶數位資源庫</h1>
+        </div>
+        <div style="display:flex; align-items:center; gap: 12px;">
+            <div class="editors">
+                編輯團隊：新北市更寮國小吳國榮、王筱瑛、屏東縣竹田國小劉蘋老師
+            </div>
+            <button class="bell-btn" id="bellBtn" title="最新消息">
+                🔔<span class="bell-badge" id="bellBadge"></span>
+            </button>
+        </div>
+    </header>
+    <button id="back-to-top" title="回到頂部">↑</button>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="layout">
+        <aside class="sidebar" id="sidebar">
+            <nav class="sidebar-nav" id="sidebar-nav">
+                <!-- 動態產生 -->
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div id="loading-container">
+                <div class="spinner"></div>
+                <div>正在連線至資料庫...</div>
+            </div>
+            <div id="error-container" style="display:none;"></div>
+            <div class="content-container" id="main-content" style="display:none;"></div>
+        </main>
+    </div>
+
+    <!-- 更新紀錄 Modal -->
+    <div class="modal-overlay" id="changelogModal">
+        <div class="changelog-modal">
+            <div class="modal-header">
+                <h2>🔔 最新資源上線與系統公告</h2>
+                <button class="close-btn" id="closeModalBtn">&times;</button>
+            </div>
+            <div class="modal-body" id="changelogBody">
+                <div class="text-center" style="color:var(--text-muted); padding: 2rem 0;">目前尚無最新消息</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===================== 資料讀取 =====================
+        window.onload = function() {
+            google.script.run
+                .withSuccessHandler(buildPage)
+                .withFailureHandler(showError)
+                .getDataFromSheet();
+        };
+
+        function showError(err) {
+            document.getElementById('loading-container').style.display = 'none';
+            var errDiv = document.getElementById('error-container');
+            errDiv.innerHTML = '<strong>⚠️ 讀取失敗：</strong>' + err.message + '<br><small>請確認工作表名稱為 English。</small>';
+            errDiv.style.display = 'block';
+        }
+
+        // ===================== 格式 → 徽章 =====================
+        function getBadge(format, url) {
+            if (!url && (!format || format.trim() === '')) return '📌 提示';
+            if (!format || format.trim() === '') return '📄 其他';
+            if (format.includes('影片')) return '🎬 影片';
+            if (format.includes('遊戲') || format.includes('測驗')) return '🎮 遊戲/測驗';
+            if (format.includes('簡報')) return '🎨 簡報';
+            if (format.includes('電子書')) return '📘 電子書';
+            if (format.includes('文件')) return '📄 文件';
+            if (!url) return '📌 提示';
+            return '📄 ' + format;
+        }
+
+        // ===================== 建構頁面 =====================
+        function buildPage(payload) {
+            var data = payload.resources || [];
+            var logs = payload.logs || [];
+
+            // --- 渲染 Modal ---
+            var changelogBody = document.getElementById('changelogBody');
+            var bellBadge = document.getElementById('bellBadge');
+            
+            var CHANGELOG_KEY = 'changelog_last_read';
+            var latestLogDate = (logs && logs.length > 0) ? logs[0].date : '';
+
+            if (logs && logs.length > 0) {
+                var lastRead = localStorage.getItem(CHANGELOG_KEY) || '';
+                if (latestLogDate > lastRead) {
+                    bellBadge.classList.add('active'); // 有新通知才亮紅點
+                }
+                var logHtml = logs.map(function(log) {
+                    var lblClass = 'lbl-ann';
+                    if (log.type && log.type.indexOf('新增') !== -1) lblClass = 'lbl-new';
+                    else if (log.type && log.type.indexOf('修正') !== -1) lblClass = 'lbl-fix';
+                    
+                    var relationTag = (log.grade || log.domain) ? "<span class='badge' style='margin:0; font-size:0.75rem; font-weight:normal;'>" + (log.grade || '') + " " + (log.domain || '') + "</span>" : "";
+
+                    return "<div class='log-item'>" +
+                           "<div class='log-meta'><span class='log-date'>" + log.date + "</span><span class='" + lblClass + "'>" + log.type + "</span> " + relationTag + "</div>" +
+                           "<div class='log-content'>" + log.content + "</div>" +
+                           "</div>";
+                }).join('');
+                changelogBody.innerHTML = logHtml;
+            }
+
+            // Modal 開關邏輯
+            var bellBtn = document.getElementById('bellBtn');
+            var changelogModal = document.getElementById('changelogModal');
+            var closeBtn = document.getElementById('closeModalBtn');
+            if (bellBtn) {
+                bellBtn.addEventListener('click', function() {
+                    changelogModal.classList.add('open');
+                    bellBadge.classList.remove('active');
+                    if (latestLogDate) localStorage.setItem(CHANGELOG_KEY, latestLogDate); // 記住已讀到哪一筆
+                });
+                closeBtn.addEventListener('click', function() {
+                    changelogModal.classList.remove('open');
+                });
+                changelogModal.addEventListener('click', function(e) {
+                    if (e.target === this) this.classList.remove('open');
+                });
+            }
+
+            // 建構樹狀結構：年級 → 領域 → 類型 → 單元 → [資源]
+            var tree = {};
+            var gradeOrder = [];
+
+            data.forEach(function(row) {
+                var grade = row[0], domain = row[1], type = row[2],
+                    unit = row[3], name = row[4], format = row[5], url = row[6];
+                if (!grade || !domain) return;
+
+                if (!tree[grade]) { tree[grade] = {}; gradeOrder.push(grade); }
+                if (!tree[grade][domain]) tree[grade][domain] = {};
+                var t = type || '其他';
+                if (!tree[grade][domain][t]) tree[grade][domain][t] = {};
+                var u = unit || '其他';
+                if (!tree[grade][domain][t][u]) tree[grade][domain][t][u] = [];
+                tree[grade][domain][t][u].push({ name: name || '', format: format || '', url: url || '' });
+            });
+
+            // 去除重複年級（保留第一次出現順序）
+            gradeOrder = gradeOrder.filter(function(v, i, a) { return a.indexOf(v) === i; });
+
+            // ---- 建構側邊導覽 ----
+            var navHtml = '';
+            gradeOrder.forEach(function(grade) {
+                navHtml += "<div class='nav-grade'>🎓 " + grade + "</div>";
+                Object.keys(tree[grade]).forEach(function(domain) {
+                    var id = (grade + '-' + domain).replace(/\s/g, '_').replace(/[()]/g, '');
+                    navHtml += "<a href='#" + id + "' class='nav-link'>📚 " + domain + "</a>";
+                });
+            });
+            document.getElementById('sidebar-nav').innerHTML = navHtml;
+
+            // ---- 建構主要內容 ----
+            var mainHtml = "<div class='sticky-search-hint'>💡 <strong>小提示：</strong>您可以使用鍵盤 <code>Ctrl + F</code> (Windows) 或 <code>Cmd + F</code> (Mac) 直接在整頁搜尋關鍵字。</div>";
+
+            gradeOrder.forEach(function(grade) {
+                mainHtml += "<section class='grade-section'><h2 class='grade-title'>" + grade + "</h2>";
+                Object.keys(tree[grade]).forEach(function(domain) {
+                    var id = (grade + '-' + domain).replace(/\s/g, '_').replace(/[()]/g, '');
+                    mainHtml += "<div id='" + id + "' style='scroll-margin-top: 80px;'>";
+                    mainHtml += "<details class='domain-section'><summary class='domain-title'>📚 " + domain + "</summary><div class='domain-body'>";
+                    Object.keys(tree[grade][domain]).forEach(function(type) {
+                        mainHtml += "<details class='type-section'><summary class='type-title'>📂 " + type + "</summary><div class='type-body'>";
+                        Object.keys(tree[grade][domain][type]).forEach(function(unit) {
+                            var sameAsType = (unit === type);
+                            if (!sameAsType) {
+                                mainHtml += "<details class='unit-section'><summary class='unit-title'>📖 " + unit + "</summary><div class='unit-body'>";
+                            }
+                            tree[grade][domain][type][unit].forEach(function(res) {
+                                var badge = getBadge(res.format, res.url);
+                                var hasLink = res.url && res.url.trim() !== '';
+                                var cardClass = hasLink ? 'resource-card' : 'resource-card no-link';
+                                var link = hasLink
+                                    ? "<div><a href='" + res.url + "' target='_blank'>🔗 點此開啟資源</a></div>"
+                                    : "<span class='hint-label'>📌 純文字提示，無連結</span>";
+                                mainHtml += "<div class='" + cardClass + "'><div class='resource-title'><span class='badge'>" + badge + "</span><span>" + res.name + "</span></div>" + link + "</div>";
+                            });
+                            if (!sameAsType) {
+                                mainHtml += "</div></details>";
+                            }
+                        });
+                        mainHtml += "</div></details>";
+                    });
+                    mainHtml += "</div></details></div>";
+                });
+                mainHtml += "</section>";
+            });
+
+            document.getElementById('main-content').innerHTML = mainHtml;
+            document.getElementById('loading-container').style.display = 'none';
+            document.getElementById('main-content').style.display = '';
+
+            // 啟動手風琴與互動行為
+            setupInteractions();
+        }
+
+        // ===================== 手風琴互動 =====================
+        function setupInteractions() {
+            var hamburgerBtn = document.getElementById('hamburgerBtn');
+            var sidebar = document.getElementById('sidebar');
+            var overlay = document.getElementById('sidebarOverlay');
+
+            function closeSidebar() {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('open');
+            }
+            hamburgerBtn.addEventListener('click', function() {
+                var isOpen = sidebar.classList.toggle('open');
+                overlay.classList.toggle('open', isOpen);
+            });
+            overlay.addEventListener('click', closeSidebar);
+
+            var allDomains = document.querySelectorAll('.domain-section');
+
+            // 側邊導覽點擊：跳轉 + 展開對應領域
+            document.querySelectorAll('.nav-link').forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault(); // 攔截原生錨點，避免高度變化時跑偏
+                    closeSidebar();
+                    allDomains.forEach(function(d) { d.removeAttribute('open'); });
+                    var targetId = link.getAttribute('href').substring(1);
+                    var targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        var targetDetails = targetSection.querySelector('details.domain-section');
+                        if (targetDetails) targetDetails.setAttribute('open', '');
+                        // 等 DOM 穩定後再滾動
+                        setTimeout(function() {
+                            targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 50);
+                    }
+                });
+            });
+
+            // 領域互斥手風琴
+            allDomains.forEach(function(domain) {
+                domain.addEventListener('toggle', function() {
+                    if (domain.open) {
+                        allDomains.forEach(function(other) {
+                            if (other !== domain && other.open) other.removeAttribute('open');
+                        });
+                    }
+                });
+            });
+
+            // 類型互斥手風琴（同一領域內）
+            document.querySelectorAll('.type-section').forEach(function(type) {
+                type.addEventListener('toggle', function() {
+                    if (type.open) {
+                        var parentDomain = type.closest('.domain-section');
+                        if (parentDomain) {
+                            parentDomain.querySelectorAll('.type-section').forEach(function(sibling) {
+                                if (sibling !== type && sibling.open) sibling.removeAttribute('open');
+                            });
+                        }
+                    }
+                });
+            });
+
+            // 單元互斥手風琴（同一類型內）
+            document.querySelectorAll('.unit-section').forEach(function(unit) {
+                unit.addEventListener('toggle', function() {
+                    if (unit.open) {
+                        var parentType = unit.closest('.type-section');
+                        if (parentType) {
+                            parentType.querySelectorAll('.unit-section').forEach(function(sibling) {
+                                if (sibling !== unit && sibling.open) sibling.removeAttribute('open');
+                            });
+                        }
+                    }
+                });
+            });
+
+            // ===================== Intersection Observer：側邊欄 active =====================
+            var navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+            var sectionMap = {};
+            navLinks.forEach(function(link) {
+                var id = link.getAttribute('href').substring(1);
+                var el = document.getElementById(id);
+                if (el) sectionMap[id] = link;
+            });
+
+            var observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(function(l) { l.classList.remove('active'); });
+                        var link = sectionMap[entry.target.id];
+                        if (link) link.classList.add('active');
+                    }
+                });
+            }, {
+                root: document.querySelector('.main-content'),
+                rootMargin: '-10% 0px -70% 0px',
+                threshold: 0
+            });
+
+            Object.keys(sectionMap).forEach(function(id) {
+                var el = document.getElementById(id);
+                if (el) observer.observe(el);
+            });
+
+            // ===================== 回到頂部按鈕 =====================
+            var mainContent = document.querySelector('.main-content');
+            var backBtn = document.getElementById('back-to-top');
+            mainContent.addEventListener('scroll', function() {
+                if (mainContent.scrollTop > 300) {
+                    backBtn.classList.add('visible');
+                } else {
+                    backBtn.classList.remove('visible');
+                }
+            });
+            backBtn.addEventListener('click', function() {
+                mainContent.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+    </script>
+</body>
+</html>

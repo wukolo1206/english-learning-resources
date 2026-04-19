@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd \"D:/備課ai/英語學扶資源\" && clasp push 2>&1)",
+      "Bash(cd \"D:\\\\備課ai\\\\英語學扶資源\" && clasp push 2>&1)",
+      "Bash(cd \"D:\\\\備課ai\\\\英語學扶資源\" && clasp deploy --deploymentId AKfycbz9yWdBRA26XbOAOsHkOsBwUP6Ul2bw-zCbYaB94z1431R28FVyFZ_xN_FY6Iw_9vYaIg 2>&1)",
+      "Bash(cd \"D:\\\\備課ai\\\\英語學扶資源\" && copy index_scroll.html index_scroll.html.bak)",
+      "Bash(cd \"D:\\\\備課ai\\\\英語學扶資源\" && clasp push 2>&1 && clasp deploy --deploymentId AKfycbz9yWdBRA26XbOAOsHkOsBwUP6Ul2bw-zCbYaB94z1431R28FVyFZ_xN_FY6Iw_9vYaIg 2>&1)",
+      "Bash(cp \"D:\\\\備課ai\\\\英語學扶資源\\\\index_scroll.html.bak2\" \"D:\\\\備課ai\\\\英語學扶資源\\\\index_scroll.html\" && cd \"D:\\\\備課ai\\\\英語學扶資源\" && clasp push 2>&1 && clasp deploy --deploymentId AKfycbz9yWdBRA26XbOAOsHkOsBwUP6Ul2bw-zCbYaB94z1431R28FVyFZ_xN_FY6Iw_9vYaIg 2>&1)",
+      "Bash(cd \"D:/備課ai/英語學扶資源\" && clasp push)",
+      "Bash(cd \"D:/備課ai/英語學扶資源\" && clasp deploy --deploymentId AKfycbz9yWdBRA26XbOAOsHkOsBwUP6Ul2bw-zCbYaB94z1431R28FVyFZ_xN_FY6Iw_9vYaIg)",
+      "Bash(python setup_changelog_sheet.py)",
+      "Bash(python -X utf8 setup_changelog_sheet.py)",
+      "Bash(python -X utf8 read_english_sheet.py)",
+      "Bash(python -X utf8 update_changelog_dropdowns.py)",
+      "Bash(clasp push:*)",
+      "Bash(clasp deploy:*)",
+      "Bash(python -X utf8 check_english_rows.py)",
+      "Bash(python -X utf8 -c \"import sys; print\\(sys.path\\)\")",
+      "Bash(python -X utf8 -m pip show google-auth)",
+      "Bash(python -X utf8 -c \"import sys; sys.path.insert\\(0, r'C:\\\\Users\\\\wu\\\\AppData\\\\Local\\\\Packages\\\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\\\LocalCache\\\\local-packages\\\\Python313\\\\site-packages'\\); import google.auth; print\\('ok'\\)\")"
+    ],
+    "additionalDirectories": [
+      "D:\\備課ai\\google workspace"
+    ]
+  }
+}

@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新北英語學扶數位資源庫 (樹狀目錄版)</title>
+    <style>
+        
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;900&display=swap');
+
+    :root {
+        --primary: #6366f1;
+        --primary-dark: #4f46e5;
+        --primary-light: #e0e7ff;
+        --text-main: #1e293b;
+        --text-muted: #64748b;
+        --bg-main: #f1f5f9;
+        --bg-card: #ffffff;
+        --border-color: #e2e8f0;
+        --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.08);
+        --shadow-md: 0 4px 12px -2px rgb(0 0 0 / 0.12);
+        --radius: 0.5rem;
+        --font-size-base: 16px;
+    }
+    body {
+        font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+        background-color: var(--bg-main);
+        color: var(--text-main);
+        font-size: var(--font-size-base);
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+        -webkit-font-smoothing: antialiased;
+    }
+    a {
+        color: var(--primary-dark);
+        text-decoration: none;
+        transition: color 0.15s ease;
+        font-weight: 500;
+    }
+    a:hover { color: var(--primary); text-decoration: underline; }
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.2rem 0.6rem;
+        border-radius: 9999px;
+        background: var(--primary-light);
+        color: var(--primary-dark);
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        margin-right: 0.6rem;
+        white-space: nowrap;
+    }
+    .resource-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius);
+        padding: 0.85rem 1.1rem;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+        box-shadow: var(--shadow-sm);
+        transition: all 0.2s ease;
+        position: relative;
+        overflow: hidden;
+        border-left: 3px solid transparent;
+    }
+    .resource-card:hover {
+        border-left-color: var(--primary);
+        box-shadow: var(--shadow-md);
+        transform: translateX(3px);
+        background: #fdfdff;
+    }
+    .resource-title {
+        font-weight: 600;
+        font-size: 1rem;
+        margin-bottom: 0.4rem;
+        display: flex;
+        align-items: center;
+        color: var(--text-main);
+    }
+    header {
+        background: white;
+        border-bottom: 1px solid var(--border-color);
+        padding: 1rem 2rem;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        box-shadow: var(--shadow-sm);
+    }
+    h1 { margin: 0; font-size: 1.4rem; color: var(--primary); }
+
+        .container { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+        details {
+            background: white; margin-bottom: 0.5rem; border: 1px solid var(--border-color);
+            border-radius: 0.5rem; overflow: hidden;
+        }
+        summary {
+            padding: 1rem; cursor: pointer; font-weight: 600; background: #fff;
+            list-style: none; display: flex; align-items: center;
+        }
+        summary::-webkit-details-marker { display: none; }
+        summary::before {
+            content: '▶'; display: inline-block; margin-right: 0.5rem; font-size: 0.8em;
+            transition: transform 0.2s; color: var(--text-muted);
+        }
+        details[open] > summary::before { transform: rotate(90deg); }
+        details[open] > summary { border-bottom: 1px solid var(--border-color); background: var(--primary-light); }
+        .details-content { padding: 1rem; }
+        
+        /* Nesting styles */
+        .level-2 details { border-left: 3px solid #60A5FA; margin-left:1rem; margin-top:0.5rem; }
+        .level-3 details { border-left: 3px solid #34D399; margin-left:1rem; margin-top:0.5rem; }
+        .level-4 details { border-left: 3px solid #F87171; margin-left:1rem; margin-top:0.5rem; }
+        
+    </style>
+</head>
+<body>
+    <header>
+        <h1>新北英語學扶數位資源庫</h1>
+        <p style="color: var(--text-muted); font-size: 0.875rem; margin-top:0.5rem;">
+            編輯團隊：新北市更寮國小吳國榮、王筱瑛、屏東縣竹田國小劉蘋老師<br>
+            點擊箭頭展開分類，逐層瀏覽學習資源。
+        </p>
+    </header>
+    <div class="container">
+
+<details><summary>🎓 三年級</summary>
+<div class='details-content level-2'>
+  <details><summary>📚 語音-音韻覺識</summary>
+  <div class='details-content level-3'>
+    <details><summary>📂 迷思概念</summary>
+    <div class='details-content level-4'>
+      <details><summary>📖 迷思概念</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📌 提示</span><span>提醒應聽「字首」音是否相同，而非母音或字尾</span></div>
+        </div>
+      </div></details>
+    </div></details>
+    <details><summary>📂 教材與評量</summary>
+    <div class='details-content level-4'>
+      <details><summary>📖 學理基礎</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎬 影片</span><span>學理基礎</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.youtube.com/watch?time_continue=4&v=tk0UiXQQL2U&feature=emb_logo' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 教法連結</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎬 影片</span><span>教法連結</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.youtube.com/watch?v=Mw2x1jpBKWk' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit 1 What's The First Sound?</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>（老師解說、帶領使用）</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/resource/104845327/whats-the-first-sound' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit 2 Same Or Different?</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>phonics same or different</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/resource/104845266/phonics-same-or-different' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit 3 Odd Word Out</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>Odd One Out Quiz音韻覺識</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/resource/95115614/odd-one-out-quiz%E9%9F%B3%E9%9F%BB%E8%A6%BA%E8%AD%98' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>odd one out音韻覺識</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/95115/894/588' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit 4 Sound Categorization</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>U4Sound Categorization聲音的分類</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/resource/98118935/english/u4sound-categorization%E8%81%B2%E9%9F%B3%E7%9A%84%E5%88%86%E9%A1%9E' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>三年級_音韻覺識</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/resource/90349656/%E4%B8%89%E5%B9%B4%E7%B4%9A%E9%9F%B3%E9%9F%BB%E8%A6%BA%E8%AD%98' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 教學簡報範例</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>教學簡報範例</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.canva.com/design/DAG7ww43sCM/4UtfIKpKZFrwv-wQxIeu0A/edit?utm_content=DAG7ww43sCM&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+    </div></details>
+  </div></details>
+  <details><summary>📚 字母</summary>
+  <div class='details-content level-3'>
+    <details><summary>📂 迷思概念</summary>
+    <div class='details-content level-4'>
+      <details><summary>📖 辨識字形相似字母</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📌 提示</span><span>1. b, d, p, q, g / 2. n, h, m</span></div>
+        </div>
+      </div></details>
+      <details><summary>📖 辨識字母名稱相似字母</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📌 提示</span><span>1. B, P, D, T / 2. S, X / 3. Q, U / 4. M, N</span></div>
+        </div>
+      </div></details>
+    </div></details>
+    <details><summary>📂 教材與評量</summary>
+    <div class='details-content level-4'>
+      <details><summary>📖 Alphabet</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>Alphabet Flashcards</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://quizlet.com/756209127/flashcards?funnelUUID=c5c926ed-cda8-4d2c-adc7-88b890571508' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit 1 Aa-Ff</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📘 電子書</span><span>Unit 1 Aa-Ff (電子書)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://exam.tcte.edu.tw/ebook_files/13312005/mobile/index.html' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>A-F</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/94947/264/455' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>A~F_字母名(音檔)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/95212/234/174' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>A~F字母音(音檔)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/95212/269/532' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit 2 Gg-Kk</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📘 電子書</span><span>Unit 2 Gg-Kk (電子書)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://exam.tcte.edu.tw/ebook_files/13312006/mobile/index.html' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>Gg-Kk</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/95023/244/642' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>Gg-Kk Match</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/104443/048/389' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit 3 Ll-Pp</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📘 電子書</span><span>Unit 3 Ll-Pp (電子書)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://exam.tcte.edu.tw/ebook_files/13312007/mobile/index.html' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>Ll-Pp Pair</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/95062/001/940' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit 4 Qq-Tt</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📘 電子書</span><span>Unit 4 Qq-Tt (電子書)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://exam.tcte.edu.tw/ebook_files/13312008/mobile/index.html' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>Rr~Tt 字母大小寫配對</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/14200/506/556' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>q,r,s,t Listen and Choose</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/95062/013/223' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit 5 Uu-Zz</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📘 電子書</span><span>Unit 5 Uu-Zz (電子書)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://exam.tcte.edu.tw/ebook_files/13312009/mobile/index.html' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>U-Z Flash Cards</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/59518/754/491' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>U-Z Match Up</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/35815/576/458' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit 6 Aa-Zz</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📘 電子書</span><span>Unit 6 Aa-Zz (電子書)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://exam.tcte.edu.tw/ebook_files/13312010/mobile/index.html' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>總複習_A~Z字母名(音檔)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/53193/107/931' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>總複習_A~Z字母音(音檔)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/53192/780/315' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>字母Aa~Zz複習</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/14640/254/8469' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+    </div></details>
+    <details><summary>📂 video</summary>
+    <div class='details-content level-4'>
+      <details><summary>📖 Alphabet</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎬 影片</span><span>Alphabet (YouTube)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://youtu.be/BELlZKpi1Zs?list=RDBELlZKpi1Zs' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>match (Quizlet)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://quizlet.com/756209127/match' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+    </div></details>
+  </div></details>
+  <details><summary>📚 常用語</summary>
+  <div class='details-content level-3'>
+    <details><summary>📂 迷思概念</summary>
+    <div class='details-content level-4'>
+      <details><summary>📖 迷思概念</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📌 提示</span><span>可於課堂中多使用教室用語，輔以動作示範(TPR)，增強三年級常用語的熟悉度</span></div>
+        </div>
+      </div></details>
+    </div></details>
+    <details><summary>📂 教材與評量</summary>
+    <div class='details-content level-4'>
+      <details><summary>📖 Unit 1 Good Morning</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📘 電子書</span><span>Unit 1 Good Morning (電子書)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://exam.tcte.edu.tw/ebook_files/13312011/mobile/index.html' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>Unit 1 Good Morning- Match</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/104443/561/698' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit 2 Be Quiet</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📘 電子書</span><span>Unit 2 Be Quiet (電子書)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://exam.tcte.edu.tw/ebook_files/13312012/mobile/index.html' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>Unit 2 Be Quiet -Match</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/104443/673/971' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit1-Unit2 綜合練習</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>Match</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/56102/594/3009' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>Quiz</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/55823/469/904' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+    </div></details>
+  </div></details>
+</div></details>
+
+<details><summary>🎓 四年級</summary>
+<div class='details-content level-2'>
+  <details><summary>📚 語音(字母拼讀規則)</summary>
+  <div class='details-content level-3'>
+    <details><summary>📂 迷思概念</summary>
+    <div class='details-content level-4'>
+      <details><summary>📖 迷思概念</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📌 提示</span><span>辨識a, e, i, o, u所代表的短母音</span></div>
+        </div>
+      </div></details>
+    </div></details>
+    <details><summary>📂 教材與評量</summary>
+    <div class='details-content level-4'>
+      <details><summary>📖 G4 Phonics-Vowel</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>G4 Phonics-Vowel (Canva)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.canva.com/design/DAG3_yM0rOo/pfUug1rJcHt-m6fE3HFReA/edit?utm_content=DAG3_yM0rOo&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📄 文件</span><span>Gemini-CVC Practice1</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://gemini.google.com/share/7dd307abc140' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📄 文件</span><span>‎Gemini - cvc Practice2</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://gemini.google.com/share/9f418716dea5' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📄 文件</span><span>‎Gemini - CVC</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://gemini.google.com/share/7dd307abc140' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Phonics & Stuff</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🔗 連結</span><span>Phonics & Stuff</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://phonicsandstuff.com/' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Starfall</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🔗 連結</span><span>Learn to Read with Phonics - Starfall</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.starfall.com/h/ltr-classic/' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🔗 連結</span><span>Starfall phonics拼讀網＿Anita老師</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://class.kh.edu.tw/1283' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+    </div></details>
+  </div></details>
+  <details><summary>📚 常用語</summary>
+  <div class='details-content level-3'>
+    <details><summary>📂 迷思概念</summary>
+    <div class='details-content level-4'>
+      <details><summary>📖 迷思概念</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📌 提示</span><span>可於課堂中多使用教室用語，輔以動作示範(TPR)，增強四年級常用語的熟悉度</span></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📌 提示</span><span>put away/ take out</span></div>
+        </div>
+      </div></details>
+    </div></details>
+    <details><summary>📂 教材與評量</summary>
+    <div class='details-content level-4'>
+      <details><summary>📖 Unit 1 How Are You?</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📘 電子書</span><span>Unit 1 How Are You? (電子書)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://exam.tcte.edu.tw/ebook_files/13402012/mobile/index.html' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>Unit 1 How Are You? (Canva)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.canva.com/design/DAG3_wDV3Fk/8KTnm75voBEdJfKewKi-Ig/edit?utm_content=DAG3_wDV3Fk&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📄 文件</span><span>Unit 1 How Are You? (Gemini)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://gemini.google.com/share/8d5e78201411' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>句子聽辨</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/55669/629/7262' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit 2 Come Here</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📘 電子書</span><span>Unit 2 Come Here (電子書)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://exam.tcte.edu.tw/ebook_files/13402013/mobile/index.html' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>Unit 2 Come Here (Canva)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.canva.com/design/DAG7K3BpVRM/s3tI2w5e8mgJXUMMEZvWtw/edit?utm_content=DAG7K3BpVRM&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>句子聽辨</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/57627/304/929' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+    </div></details>
+  </div></details>
+  <details><summary>📚 字詞與文法句構</summary>
+  <div class='details-content level-3'>
+    <details><summary>📂 迷思概念</summary>
+    <div class='details-content level-4'>
+      <details><summary>📖 肯定／否定</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📌 提示</span><span>肯定／否定 (ex：It’s a marker. It’s not a ruler.)</span></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>Gemini-not</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://halloween12345.my.canva.site/it-s-a-it-s-not-vocabulary-game-design' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📄 文件</span><span>Gemini-not2</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://gemini.google.com/share/ff3d9bfa4136' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 this／that</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🔗 連結</span><span>Wordwall (資料夾)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/teacher/14515004/pingliuc9apple/folder/3392162/%E8%8B%B1%E8%AA%9E%E5%AD%B8%E7%BF%92%E6%89%B6%E5%8A%A9%E6%96%B0%E5%8C%97%E5%B8%82%E5%AD%B8%E7%BF%92%E6%89%B6%E5%8A%A9%E4%B8%AD%E5%BF%83%E8%B3%87%E6%BA%90%E5%BD%99%E6%95%B4/4th-grade' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>This / That</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/95642/457/369' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>this/that</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/54520/144/571' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>請看圖，選出正確的答案</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/31799/645/7053' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+    </div></details>
+    <details><summary>📂 教材&評量</summary>
+    <div class='details-content level-4'>
+      <details><summary>📖 Unit 1 What's Your Name?</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>Unit 1 What's Your Name? (Canva)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.canva.com/design/DAG5TXb6kUY/jnSuK-ams8tBD2eCp_-01g/edit?utm_content=DAG5TXb6kUY&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>What's your name?</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/95439/772/576' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit 2 What's This？（Food）</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>Unit 2 What's This？（Food）(Canva)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.canva.com/design/DAG3_8YHpxw/HVuQjJ_CNnWuDvyMRYsN0w/edit?utm_content=DAG3_8YHpxw&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>Unit 2 What's This？（Food）(Canva Site)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://sf5l1words.my.canva.site/dag0oh-ooby' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>food&fruit</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/95438/539/166' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📄 文件</span><span>Unit 2 What's This？（Food）(Gemini)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://gemini.google.com/share/09bfa0c33e96' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>Unit 2 What's This？（Food）(Canva Site 2)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://sf5l1words.my.canva.site/dag0oipsjvq' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit 3 What's That?（Animals）</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>Unit 3 What's That?（Animals）+Unit 6 Is It A Bird? (Canva)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.canva.com/design/DAG3_x_tc9Y/4FDjpGSxDl_2kVK_k0GABg/edit?utm_content=DAG3_x_tc9Y&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>Unit 3 What's That?（Animals）(Canva Site)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://halloween12345.my.canva.site/it-s-a-it-s-not-vocabulary-game-design' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>reveal the picture</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/98123/802/588' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>Words</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/95439/529/190' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit 4 What Color Is It？</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>Unit 4 What Color Is It？(Canva)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.canva.com/design/DAG3_2XEigE/XLGXP7P6Qo7UuDw1Pxoiyg/edit?utm_content=DAG3_2XEigE&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>Unit 4 What Color Is It？(Canva Site)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.canva.com/design/DAGyeKSp76U/GVXdNzC-13X2An3g0qJb3g/view?utm_content=DAGyeKSp76U&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hc1a446fdd2' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>words</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/95439/406/496' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>What color is it?</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/24130/845/6283' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>Match the color</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/55327/736/359' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>Unit 4 What Color Is It？—記憶配對</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.canva.com/design/DAGyeByNw58/1VFB-AS8v0BiDu5GK3GyDQ/view?utm_content=DAGyeByNw58&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h25431d862f' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit 5 Is That A Pen?</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>Unit 5 Is That A Pen? (Canva)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.canva.com/design/DAG5S0DVGc8/-49y2jEJ7nlHWj7se5mAMA/edit?utm_content=DAG5S0DVGc8&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>words-stationary</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/76336/331/178' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>words Match Up-stationary</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/66038/898/675' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>sentence-答題高手</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/31799/645/6625' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>this/ that</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/53851/909/339' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+    </div></details>
+    <details><summary>📂 繪本資源</summary>
+    <div class='details-content level-4'>
+      <details><summary>📖 繪本</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📘 電子書</span><span>繪本＿Ｗhere is my red marker?</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://exam.tcte.edu.tw/ebook_files/23472327/mobile/index.html' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📘 電子書</span><span>繪本＿Let's play!</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://exam.tcte.edu.tw/ebook_files/23472320/mobile/index.html' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📘 電子書</span><span>繪本＿What's this?(animal)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://exam.tcte.edu.tw/ebook_files/23472319/mobile/index.html' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+    </div></details>
+  </div></details>
+</div></details>
+
+<details><summary>🎓 五年級</summary>
+<div class='details-content level-2'>
+  <details><summary>📚 語音(字母拼讀規則)</summary>
+  <div class='details-content level-3'>
+    <details><summary>📂 迷思概念</summary>
+    <div class='details-content level-4'>
+      <details><summary>📖 迷思概念</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📌 提示</span><span>sk/ st</span></div>
+        </div>
+      </div></details>
+    </div></details>
+    <details><summary>📂 教材與評量</summary>
+    <div class='details-content level-4'>
+      <details><summary>📖 G5 Phonics</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>G5 Phonics (Canva)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.canva.com/design/DAG36AwfNnQ/ORfmiR1l1cRCO-DPx4sHiQ/edit?utm_content=DAG36AwfNnQ&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>th</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/95460/667/150' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>br, bl</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/53975/915/999' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>bl, br 2</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/59391/390/748' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>st, sk</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/95460/681/917' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>th, ch, tch, sh</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/56253/081/654' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Phonics & Stuff</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🔗 連結</span><span>Phonics & Stuff</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://phonicsandstuff.com/' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Starfall</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🔗 連結</span><span>Learn to Read with Phonics - Starfall</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.starfall.com/h/ltr-classic/' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🔗 連結</span><span>Starfall phonics拼讀網＿Anita老師</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://class.kh.edu.tw/1283' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+    </div></details>
+  </div></details>
+  <details><summary>📚 常用語</summary>
+  <div class='details-content level-3'>
+    <details><summary>📂 迷思概念</summary>
+    <div class='details-content level-4'>
+      <details><summary>📖 迷思概念</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📌 提示</span><span>可於課堂中多使用教室用語，輔以動作示範(TPR)，增強五年級常用語的熟悉度</span></div>
+        </div>
+      </div></details>
+    </div></details>
+    <details><summary>📂 教材與評量</summary>
+    <div class='details-content level-4'>
+      <details><summary>📖 Unit 1 Are You OK</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📘 電子書</span><span>Unit 1 Are You OK (電子書)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://exam.tcte.edu.tw/ebook_files/13512013/mobile/index.html' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>Unit 1 Are You OK (Canva)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.canva.com/design/DAG3_47C6No/inWjN_3akWORnDqvu_o88w/edit?utm_content=DAG3_47C6No&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>English Phrases Practice Game</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://halloween12345.my.canva.site/english-phrases-practice-game' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit 2 Hurry Up!</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📘 電子書</span><span>Unit 2 Hurry Up! (電子書)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://exam.tcte.edu.tw/ebook_files/13512014/mobile/index.html' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>Unit 2 Hurry Up! (Canva)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.canva.com/design/DAG3_6YCSzk/I9YxpRIfRM6OHG6HAqslOw/edit?utm_content=DAG3_6YCSzk&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>常用語—句子聽辨</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/57612/009/5459' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>常用語—圖選文</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/95653/911/900' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>常用語—圖選聽力檔</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/95653/855/500' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+    </div></details>
+  </div></details>
+  <details><summary>📚 字詞與文法句構</summary>
+  <div class='details-content level-3'>
+    <details><summary>📂 迷思概念</summary>
+    <div class='details-content level-4'>
+      <details><summary>📖 迷思概念</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📌 提示</span><span>cold／cool</span></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📌 提示</span><span>can／can't</span></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📌 提示</span><span>dance/ sing/ read</span></div>
+        </div>
+      </div></details>
+    </div></details>
+    <details><summary>📂 教材與評量</summary>
+    <div class='details-content level-4'>
+      <details><summary>📖 Unit 1 Who Is She?</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>Unit 1 Who Is She? (Canva)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.canva.com/design/DAG3_5kWHLA/YrFBRNEw_vIeVnSmo4W8Vw/edit?utm_content=DAG3_5kWHLA&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📄 文件</span><span>Unit 1 Who Is She? (Gemini)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://gemini.google.com/share/b0b7ea200f60' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📄 文件</span><span>Unit 1 Who Is She? (Gemini 2)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://gemini.google.com/share/08a5aec5e0e1' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>Words</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/95440/109/494' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>she or he</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/95463/712/111' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>Pattern</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/32120/612/6953' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit 2 How Old Are You?</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>Unit 2 How Old Are You? +Unit 6 What Time Is It? (Canva)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.canva.com/design/DAG5S7ASyQY/uoYndbKvUiZ3Tb_0i2XZ0g/edit?utm_content=DAG5S7ASyQY&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>numbers</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/55340/242/4728' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>文字與圖片-numbers</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/95472/581/385' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>How old are you?</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/19524/504/7747' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit 6 What Time Is It?</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>聲音與圖片-numbers</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/95472/611/572' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>What time is it?</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/628/271/5844' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>聲音和圖片-What time is it?</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/95667/836/709' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit 3 What Can You Do?</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>Unit 3 What Can You Do? （Can／Can't）(Canva)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.canva.com/design/DAG3_x35VH0/TsD5qcvKOARti1Tv2RC08Q/edit?utm_content=DAG3_x35VH0&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>G5 can/can't (Canva)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.canva.com/design/DAG3_8gXbi8/eWXIGGJO86hiOFjRdG8Zrw/edit?utm_content=DAG3_8gXbi8&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📄 文件</span><span>Unit 3 What Can You Do? （Can／Can't）(Gemini)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://gemini.google.com/share/f8f7e56ba739' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>Words—聲音與圖片</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/95471/648/459' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>Words—文字與圖片</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/95471/671/312' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>Pattern</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/25129/279/7102' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>Pattern—聲音與圖片</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/95654/271/442' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>學扶考古題</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/55340/998/5461' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit 4 I'm Tired</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>Unit 4 I'm Tired (Canva)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.canva.com/design/DAG7F7xi4so/R8PW7wRE90mvx4FAD1m55Q/edit?utm_content=DAG7F7xi4so&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📄 文件</span><span>情緒造句大師</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://gemini.google.com/share/5871b7b574c9' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>Words</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/95471/862/114' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>Sentence</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/19531/868/5180' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit 5 What Do You Like?</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>Unit 5 What Do You Like? (Canva)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.canva.com/design/DAG7GH6BBRk/1qUGLwTd-9UDgZqTaeU4LA/edit?utm_content=DAG7GH6BBRk&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📄 文件</span><span>美味單字大挑戰</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://gemini.google.com/share/6f57a49a3f08' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>L6食物-聲音與圖片</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/95471/984/854' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>Sentence Pattern</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/37721/282/2294' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit 7 How's The Weather?</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>Unit 7 How's The Weather? (Canva)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.canva.com/design/DAG7E3Mr2wo/tsYHHmavE9J72XhyMyp-1w/edit?utm_content=DAG7E3Mr2wo&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📄 文件</span><span>Weather Match!</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://gemini.google.com/share/ee369db34236' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>weather and feeling 文字與圖片</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/95472/159/147' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>weather and feeling 聲音與圖片</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/95472/174/791' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit 8 The Boy Is Tall</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>Unit 8 The Boy Is Tall (Canva)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.canva.com/design/DAG7GDhuCeg/G-xQ0-1U1fGUN4CHfZBWow/edit?utm_content=DAG7GDhuCeg&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📄 文件</span><span>Adjective Detective 形容詞偵探</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://gemini.google.com/share/c9fbcbe50feb' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>L8句型-文字與圖片</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/95668/201/551' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>L8形容詞-文字與圖片</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/95472/319/863' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+    </div></details>
+    <details><summary>📂 繪本資源</summary>
+    <div class='details-content level-4'>
+      <details><summary>📖 繪本</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📘 電子書</span><span>繪本＿How old are you?</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://exam.tcte.edu.tw/ebook_files/23472321/mobile/index.html' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📘 電子書</span><span>繪本＿What Can You Do?</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://exam.tcte.edu.tw/ebook_files/23472322/mobile/index.html' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📘 電子書</span><span>繪本＿Do you like banana?</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://exam.tcte.edu.tw/ebook_files/23472325/mobile/index.html' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📘 電子書</span><span>繪本＿How's the weather?</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://exam.tcte.edu.tw/ebook_files/23472323/mobile/index.html' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+    </div></details>
+  </div></details>
+</div></details>
+
+<details><summary>🎓 六年級</summary>
+<div class='details-content level-2'>
+  <details><summary>📚 語音(字母拼讀規則)</summary>
+  <div class='details-content level-3'>
+    <details><summary>📂 迷思概念</summary>
+    <div class='details-content level-4'>
+      <details><summary>📖 迷思概念</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📌 提示</span><span>ee, ea, ay</span></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📌 提示</span><span>silent e的母音</span></div>
+        </div>
+      </div></details>
+    </div></details>
+    <details><summary>📂 教材與評量</summary>
+    <div class='details-content level-4'>
+      <details><summary>📖 Silent E</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>silent e 簡報Ａ (下載)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://drive.google.com/drive/folders/1Fdd_o4djTVfMa7G0_jTsV2TdPlakHajU?usp=sharing ' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>a_e</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/94848/726/504' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>e_e</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/94848/767/652' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>_i/ i_e_選擇大挑戰</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/94774/317/974' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>silent e 簡報Ｂ (下載)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://drive.google.com/drive/folders/1Fdd_o4djTVfMa7G0_jTsV2TdPlakHajU?usp=sharing ' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>_o/ o_e 神秘盒</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/94774/095/142' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>u / u_e-選擇大挑戰</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/37573/608/5633' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Phonics & Stuff</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🔗 連結</span><span>Phonics & Stuff</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://phonicsandstuff.com/' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Starfall</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🔗 連結</span><span>Learn to Read with Phonics - Starfall</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.starfall.com/h/ltr-classic/' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🔗 連結</span><span>Starfall phonics拼讀網＿Anita老師</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://class.kh.edu.tw/1283' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+    </div></details>
+  </div></details>
+  <details><summary>📚 常用語</summary>
+  <div class='details-content level-3'>
+    <details><summary>📂 迷思概念</summary>
+    <div class='details-content level-4'>
+      <details><summary>📖 迷思概念</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📌 提示</span><span>可於課堂中多使用教室用語，輔以動作示範(TPR)，增強六年級常用語的熟悉度</span></div>
+        </div>
+      </div></details>
+    </div></details>
+    <details><summary>📂 教材與評量</summary>
+    <div class='details-content level-4'>
+      <details><summary>📖 Unit 1 Excuse Me</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📘 電子書</span><span>Unit 1 Excuse Me (電子書)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://exam.tcte.edu.tw/ebook_files/13602011/mobile/index.html' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>Unit 1 Excuse Me (Canva)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.canva.com/design/DAG588of2ro/Bk6ZPurqX_BnAI7bXmGmIg/edit?utm_content=DAG588of2ro&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit 2 Watch Out!</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📘 電子書</span><span>Unit 2 Watch Out! (電子書)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://exam.tcte.edu.tw/ebook_files/13602012/mobile/index.html' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>Unit 2 Watch Out! (Canva)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.canva.com/design/DAG580NoLig/SAb7IB4Exu6zJr0hujkucw/edit?utm_content=DAG580NoLig&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>句子聽辨</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/67051/431/461' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+    </div></details>
+  </div></details>
+  <details><summary>📚 字詞與文法句構</summary>
+  <div class='details-content level-3'>
+    <details><summary>📂 迷思概念</summary>
+    <div class='details-content level-4'>
+      <details><summary>📖 迷思概念</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📌 提示</span><span>Jobs</span></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📌 提示</span><span>A: What is he/she doing? B: (He’s/She’s) drawing.</span></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📌 提示</span><span>A: Where are you going? B: (I’m going) to the park.</span></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📌 提示</span><span>A:Where are you?B:I am in the park.</span></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📌 提示</span><span>A:Where is the my book?It's under the box.</span></div>
+        </div>
+      </div></details>
+    </div></details>
+    <details><summary>📂 教材與評量</summary>
+    <div class='details-content level-4'>
+      <details><summary>📖 Unit 1 Are You A Student?</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>Unit 1 Are You A Student? (Canva)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.canva.com/design/DAG7KDy_O5o/mKwThObtMo2RPqaKEO1LRg/edit?utm_content=DAG7KDy_O5o&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📄 文件</span><span>Job English Challenge</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://gemini.google.com/share/66c3b957daf8' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>職業-聲音與文字</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/94849/064/867' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>Spelling words</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/94818/689/133' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>sentence pattern (1)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/94776/468/737' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>sentence pattern (2)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/94817/154/217' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit 2 What Are You Doing? (sleep...)</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>Unit 2 What Are You Doing? (Canva)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.canva.com/design/DAG7KQEixwU/kGng2iEXdZ9qSqxO5Q9MaQ/edit?utm_content=DAG7KQEixwU&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>words- Match Up</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/94849/333/755' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>What are you doing?</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/94820/382/201' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit 2 What Are You Doing? (watch TV...)</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>Unit 2 What Are You Doing? (Canva)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.canva.com/design/DAG7KV0sHiI/s5wlgoIYJWssn72TT4i0tg/edit?utm_content=DAG7KV0sHiI&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>三餐與交通</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/94849/279/749' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit 3 Do You Like Art?</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>Unit 3 Do You Like Art? (Canva)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.canva.com/design/DAG55ZAX-vM/mH8_Y8lGQgztBNNZZrjbzQ/edit?utm_content=DAG55ZAX-vM&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>科目-文字與圖片</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/94849/397/569' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>科目-聲音與圖片</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/94849/135/974' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>Do You Like Art?- Sentence</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/104446/709/418' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit 4 I'm Drawing A Car</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>Unit 4 I'm Drawing A Car (Canva)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.canva.com/design/DAG55BvgTxE/Uu3K5dTva40C2vN13_5pvA/edit?utm_content=DAG55BvgTxE&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>五官face- Match Up</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/90274/797/896' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📄 文件</span><span>繪本＿The ET</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://gemini.google.com/share/8d7084a88036' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit 5 Where Are You?</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>Unit 5 Where Are You? (Canva)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.canva.com/design/DAG580VYPE4/yL8X04KswDs_7rZm2cAcnw/edit?utm_content=DAG580VYPE4&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>房間-聽力</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/94773/089/805' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>Room-Find the match</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/94774/681/162' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>Where are you?</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/94817/910/719' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit 6 Where Are You Going?</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>Unit 6 Where Are You Going? (Canva)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.canva.com/design/DAG55Vrkrw4/oFTJDXNSfX7lLuCFzXO0hQ/edit?utm_content=DAG55Vrkrw4&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>場所</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/94849/372/644' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>Where are you going?-Match Up</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/94815/422/181' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>Where are you?Where are you going?</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/94816/325/960' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit 7 Where Is My Book?</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>Unit 7 Where Is My Book? (Canva)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.canva.com/design/DAG7Kkcj0Gk/RlcIFVLLzPZDQvS7mN2eZQ/edit?utm_content=DAG7Kkcj0Gk&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>物品-Match Up</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/94849/248/182' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>In, On, Under</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/94818/119/459' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>in, on, under-Pair</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/94817/532/773' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+      <details><summary>📖 Unit 8 I Have A Long T-shirt</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎨 簡報</span><span>Unit 8 I Have A Long T-shirt (Canva)</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.canva.com/design/DAG55cPbUfY/zS3NKDry738PLLK1-hltPg/edit?utm_content=DAG55cPbUfY&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>衣服-聲音與圖片</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/94849/102/940' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>衣服-文字與圖片</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/94849/200/226' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🎮 遊戲/測驗</span><span>I Have A Long T-shirt -sentence</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://wordwall.net/play/104446/988/913' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+    </div></details>
+    <details><summary>📂 繪本資源</summary>
+    <div class='details-content level-4'>
+      <details><summary>📖 繪本</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📘 電子書</span><span>繪本＿I have a T-shirt</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://exam.tcte.edu.tw/ebook_files/23472328/mobile/index.html' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📘 電子書</span><span>繪本＿Ｗelcome home</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://exam.tcte.edu.tw/ebook_files/23472324/mobile/index.html' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+    </div></details>
+  </div></details>
+</div></details>
+
+<details><summary>🎓 歷屆考古題及重點整理</summary>
+<div class='details-content level-2'>
+  <details><summary>📚 整合資源</summary>
+  <div class='details-content level-3'>
+    <details><summary>📂 考古題</summary>
+    <div class='details-content level-4'>
+      <details><summary>📖 考古題</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📋 列表</span><span>英語學扶歷屆考古題 -Padlet</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://padlet.com/pingliu_c9_alumni/114-12-ni3lau6lzv9mdczc' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>🔗 連結</span><span>新北市科技化學習扶助教學中心</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://www.learnmode.net/course/585159' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+    </div></details>
+    <details><summary>📂 重點整理</summary>
+    <div class='details-content level-4'>
+      <details><summary>📖 重點整理</summary>
+      <div class='details-content'>
+        <div class='resource-card'>
+          <div class='resource-title'><span class='badge'>📄 文件</span><span>英語學習扶助各年級重點整理</span></div>
+          <div style='margin-top:0.5rem;'><a href='https://drive.google.com/drive/folders/1HDZ1QBxXAxmW3HTaOcHVeo9345DhO4fn?usp=sharing' target='_blank'>🔗 點此開啟資源</a></div>
+        </div>
+      </div></details>
+    </div></details>
+  </div></details>
+</div></details>
+
+    </div>
+</body>
+</html>

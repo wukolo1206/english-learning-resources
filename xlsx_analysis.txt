@@ -1,0 +1,38 @@
+# Excel File Analysis: 新北英語學扶資源.xlsx
+
+## Sheets: English, 工作表2
+
+### Sheet: English
+- Rows: 215, Columns: 7
+- Columns:
+  - 年級
+  - 領域/類別
+  - 項目類型
+  - 單元/子分類
+  - 資源名稱
+  - 資源形式
+  - 連結 (URL)
+
+- Sample Data (First 3 rows):
+    年級    領域/類別   項目類型 單元/子分類                   資源名稱  資源形式                                                                      連結 (URL)
+0  三年級  語音-音韻覺識   迷思概念   迷思概念  提醒應聽「字首」音是否相同，而非母音或字尾  📌 提示                                                                           NaN
+1  三年級  語音-音韻覺識  教材與評量   學理基礎                   學理基礎  🎬 影片  https://www.youtube.com/watch?time_continue=4&v=tk0UiXQQL2U&feature=emb_logo
+2  三年級  語音-音韻覺識  教材與評量   教法連結                   教法連結  🎬 影片                                   https://www.youtube.com/watch?v=Mw2x1jpBKWk
+
+### Sheet: 工作表2
+- Rows: 215, Columns: 7
+- Columns:
+  - 年級
+  - 領域/類別
+  - 項目類型
+  - 單元/子分類
+  - 資源名稱
+  - 資源形式
+  - 連結 (URL)
+
+- Sample Data (First 3 rows):
+    年級    領域/類別   項目類型 單元/子分類                   資源名稱  資源形式                                                                      連結 (URL)
+0  三年級  語音-音韻覺識   迷思概念   迷思概念  提醒應聽「字首」音是否相同，而非母音或字尾  📌 提示                                                                           NaN
+1  三年級  語音-音韻覺識  教材與評量   學理基礎                   學理基礎  🎬 影片  https://www.youtube.com/watch?time_continue=4&v=tk0UiXQQL2U&feature=emb_logo
+2  三年級  語音-音韻覺識  教材與評量   教法連結                   教法連結  🎬 影片                                   https://www.youtube.com/watch?v=Mw2x1jpBKWk
+
