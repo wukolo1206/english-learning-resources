@@ -1,0 +1,673 @@
+<script>
+// ============================================================
+// 報表對應資源：前端
+// 1) 在瀏覽器解析 xlsx/csv（不依賴任何外部函式庫，用瀏覽器內建 DecompressionStream）
+// 2) 學生姓名就地換成代號，只把代號送往伺服器
+// 3) 收到結果後在瀏覽器把代號換回姓名
+// ============================================================
+var NAME_MAP = {};     // 代號 -> 真實姓名（只存在這個分頁的記憶體）
+
+function $(id){ return document.getElementById(id); }
+function esc(s){
+  return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function safeUrl(u){
+  var s = String(u || '');
+  return /^https?:\/\//i.test(s) ? s : '';
+}
+function showMsg(html, cls){
+  $('msg').innerHTML = html ? '<div class="' + (cls || 'box-warn') + '">' + html + '</div>' : '';
+}
+
+// ---------- ZIP + xlsx 解析 ----------
+function readEntries(buf){
+  var dv = new DataView(buf), n = buf.byteLength, eocd = -1;
+  for (var i = n - 22; i >= 0 && i > n - 66000; i--){
+    if (dv.getUint32(i, true) === 0x06054b50){ eocd = i; break; }
+  }
+  if (eocd < 0) throw new Error('這不是有效的 xlsx 檔（找不到壓縮檔結構）。');
+  var count = dv.getUint16(eocd + 10, true), off = dv.getUint32(eocd + 16, true);
+  var list = {}, dec = new TextDecoder();
+  for (var k = 0; k < count; k++){
+    if (dv.getUint32(off, true) !== 0x02014b50) break;
+    var method = dv.getUint16(off + 10, true);
+    var csize = dv.getUint32(off + 20, true);
+    var nameLen = dv.getUint16(off + 28, true);
+    var extraLen = dv.getUint16(off + 30, true);
+    var cmtLen = dv.getUint16(off + 32, true);
+    var lho = dv.getUint32(off + 42, true);
+    var name = dec.decode(new Uint8Array(buf, off + 46, nameLen));
+    list[name] = { method: method, csize: csize, lho: lho };
+    off += 46 + nameLen + extraLen + cmtLen;
+  }
+  return list;
+}
+
+async function readFileInZip(buf, entry){
+  if (!entry) return null;
+  var dv = new DataView(buf);
+  if (dv.getUint32(entry.lho, true) !== 0x04034b50) throw new Error('壓縮檔結構異常。');
+  var nameLen = dv.getUint16(entry.lho + 26, true);
+  var extraLen = dv.getUint16(entry.lho + 28, true);
+  var start = entry.lho + 30 + nameLen + extraLen;
+  var raw = new Uint8Array(buf, start, entry.csize);
+  if (entry.method === 0) return new TextDecoder().decode(raw);
+  if (entry.method !== 8) throw new Error('不支援的壓縮方式，請改用「另存新檔 → CSV」再上傳。');
+  if (typeof DecompressionStream === 'undefined'){
+    throw new Error('這個瀏覽器版本太舊，無法直接讀 xlsx。請把報表另存成 CSV 再上傳，或改用較新的 Chrome / Edge。');
+  }
+  var ds = new DecompressionStream('deflate-raw');
+  var stream = new Blob([raw]).stream().pipeThrough(ds);
+  return await new Response(stream).text();
+}
+
+function colToIndex(ref){
+  var m = /^([A-Z]+)/.exec(ref); if (!m) return 0;
+  var s = m[1], n = 0;
+  for (var i = 0; i < s.length; i++) n = n * 26 + (s.charCodeAt(i) - 64);
+  return n - 1;
+}
+
+function sheetToGrid(xml, shared){
+  var doc = new DOMParser().parseFromString(xml, 'application/xml');
+  var rows = doc.getElementsByTagName('row'), grid = [];
+  for (var i = 0; i < rows.length; i++){
+    var cells = rows[i].getElementsByTagName('c'), line = [];
+    for (var j = 0; j < cells.length; j++){
+      var c = cells[j], idx = colToIndex(c.getAttribute('r') || ''), t = c.getAttribute('t'), val = '';
+      if (t === 'inlineStr'){
+        var ts = c.getElementsByTagName('t');
+        for (var k = 0; k < ts.length; k++) val += ts[k].textContent;
+      } else {
+        var v = c.getElementsByTagName('v')[0];
+        if (v){
+          val = v.textContent;
+          if (t === 's') val = shared[parseInt(val, 10)] || '';
+        }
+      }
+      while (line.length < idx) line.push('');
+      line[idx] = val;
+    }
+    grid.push(line);
+  }
+  return grid;
+}
+
+async function parseXlsx(buf){
+  var entries = readEntries(buf);
+  var sharedXml = await readFileInZip(buf, entries['xl/sharedStrings.xml']);
+  var shared = [];
+  if (sharedXml){
+    var sdoc = new DOMParser().parseFromString(sharedXml, 'application/xml');
+    var sis = sdoc.getElementsByTagName('si');
+    for (var i = 0; i < sis.length; i++){
+      var ts = sis[i].getElementsByTagName('t'), s = '';
+      for (var j = 0; j < ts.length; j++) s += ts[j].textContent;
+      shared.push(s);
+    }
+  }
+  var wbXml = await readFileInZip(buf, entries['xl/workbook.xml']);
+  var relsXml = await readFileInZip(buf, entries['xl/_rels/workbook.xml.rels']);
+  var wb = new DOMParser().parseFromString(wbXml, 'application/xml');
+  var rels = new DOMParser().parseFromString(relsXml, 'application/xml');
+  var relMap = {};
+  var rl = rels.getElementsByTagName('Relationship');
+  for (var r = 0; r < rl.length; r++) relMap[rl[r].getAttribute('Id')] = rl[r].getAttribute('Target');
+
+  var sheets = [], sl = wb.getElementsByTagName('sheet');
+  for (var s2 = 0; s2 < sl.length; s2++){
+    var name = sl[s2].getAttribute('name');
+    var rid = sl[s2].getAttribute('r:id') || sl[s2].getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships','id');
+    var target = relMap[rid] || '';
+    if (target.charAt(0) === '/') target = target.substring(1);
+    else if (target.indexOf('xl/') !== 0) target = 'xl/' + target;
+    sheets.push({ name: name, path: target });
+  }
+  var out = [];
+  for (var s3 = 0; s3 < sheets.length; s3++){
+    if (!/^\d年級$/.test(sheets[s3].name)) continue;
+    var xml = await readFileInZip(buf, entries[sheets[s3].path]);
+    if (!xml) continue;
+    out.push({ name: sheets[s3].name, grid: sheetToGrid(xml, shared) });
+  }
+  if (!out.length) throw new Error('報表裡找不到「N年級」工作表。請確認上傳的是學扶評量系統的「特定學生測驗報告」。');
+  return out;
+}
+
+function parseCsvText(text){
+  var lines = text.replace(/\r/g,'').split('\n'), grid = [];
+  for (var i = 0; i < lines.length; i++){
+    if (!lines[i]) continue;
+    var row = [], cur = '', q = false;
+    for (var j = 0; j < lines[i].length; j++){
+      var ch = lines[i].charAt(j);
+      if (q){
+        if (ch === '"' && lines[i].charAt(j+1) === '"'){ cur += '"'; j++; }
+        else if (ch === '"') q = false;
+        else cur += ch;
+      } else if (ch === '"') q = true;
+      else if (ch === ',') { row.push(cur); cur = ''; }
+      else cur += ch;
+    }
+    row.push(cur); grid.push(row);
+  }
+  return [{ name: 'CSV', grid: grid }];
+}
+
+// ---------- 解讀報表（規格 4.1 格式檢核）----------
+function extractSheet(sheet){
+  var grid = sheet.grid, headRow = -1, col = {};
+  var NEED = { '題號':'no', '基本學習內容':'cat', '學習表現/學習內容':'perf', '評量重點':'focus' };
+  for (var i = 0; i < grid.length && i < 10; i++){
+    var found = 0, tmp = {};
+    for (var j = 0; j < grid[i].length; j++){
+      var v = String(grid[i][j] || '').trim();
+      if (NEED[v] !== undefined){ tmp[NEED[v]] = j; found++; }
+    }
+    if (found >= 4){ headRow = i; col = tmp; break; }
+  }
+  if (headRow < 0) throw new Error('找不到標題列（需要「題號、基本學習內容、學習表現/學習內容、評量重點」四個欄名）。報表格式可能已改版。');
+
+  // 統計欄（Ｏ／Ｘ／合計）緊接在評量重點之後；學生欄在統計欄之後
+  var statStart = col.focus + 1;
+  var names = [], head = grid[headRow];
+  for (var k = statStart + 3; k < head.length; k++){
+    var nm = String(head[k] || '').trim();
+    if (nm) names.push({ col: k, name: nm });
+  }
+  if (!names.length) throw new Error('找不到學生欄位。');
+
+  var items = [], errs = [], seen = {}, prev = null;
+  for (var r = headRow + 1; r < grid.length; r++){
+    var row = grid[r];
+    var noRaw = String(row[col.no] || '').trim();
+    if (!/^\d+$/.test(noRaw)) continue;
+    var no = parseInt(noRaw, 10);
+    if (seen[no]) { errs.push('題號 ' + no + ' 重複'); continue; }
+    seen[no] = true;
+    if (prev !== null && no !== prev + 1) errs.push('題號不連續：' + prev + ' → ' + no + '（僅提醒，仍會處理）');
+    prev = no;
+
+    var marks = [], bad = 0;
+    for (var m = 0; m < names.length; m++){
+      var v2 = String(row[names[m].col] || '').trim();
+      if (v2 !== 'Ｏ' && v2 !== 'Ｘ' && v2 !== 'O' && v2 !== 'X'){ bad++; }
+      marks.push(v2);
+    }
+    if (bad) errs.push('第 ' + no + ' 題有 ' + bad + ' 格不是 Ｏ／Ｘ');
+
+    var o = 0, x = 0;
+    for (var mm = 0; mm < marks.length; mm++){ if (marks[mm] === 'Ｏ' || marks[mm] === 'O') o++; else x++; }
+    var oRep = parseInt(String(row[statStart] || '').trim(), 10);
+    var xRep = parseInt(String(row[statStart+1] || '').trim(), 10);
+    var tRep = parseInt(String(row[statStart+2] || '').trim(), 10);
+    if (!isNaN(oRep) && oRep !== o) errs.push('第 ' + no + ' 題：報表寫 Ｏ ' + oRep + ' 人，實際算出 ' + o + ' 人');
+    if (!isNaN(xRep) && xRep !== x) errs.push('第 ' + no + ' 題：報表寫 Ｘ ' + xRep + ' 人，實際算出 ' + x + ' 人');
+    if (!isNaN(tRep) && tRep !== marks.length) errs.push('第 ' + no + ' 題：合計 ' + tRep + ' 與學生欄數 ' + marks.length + ' 不符');
+
+    items.push({
+      no: no, category: String(row[col.cat] || '').trim(),
+      performance: String(row[col.perf] || '').trim(),
+      focus: String(row[col.focus] || '').trim(), marks: marks
+    });
+  }
+  if (!items.length) throw new Error('這張工作表沒有題目資料。');
+  return { grade: sheet.name, names: names.map(function(n){ return n.name; }), items: items, errs: errs };
+}
+
+// ---------- 主流程 ----------
+$('run').addEventListener('click', async function(){
+  var f = $('file').files[0];
+  if (!f){ showMsg('請先選擇報表檔案。'); return; }
+  $('loading').style.display = 'inline'; showMsg(''); $('result').innerHTML = '';
+  try{
+    var sheets;
+    if (/\.csv$/i.test(f.name)) sheets = parseCsvText(await f.text());
+    else sheets = await parseXlsx(await f.arrayBuffer());
+
+    var parsed = [];
+    for (var i = 0; i < sheets.length; i++){
+      try { parsed.push(extractSheet(sheets[i])); }
+      catch (err){ parsed.push({ grade: sheets[i].name, fatal: err.message }); }
+    }
+    var usable = parsed.filter(function(p){ return !p.fatal; });
+    if (!usable.length) throw new Error(parsed[0].fatal || '報表無法解析。');
+
+    // 代號化：姓名只留在這裡
+    NAME_MAP = {};
+    var target = usable[0];
+    var codes = target.names.map(function(n, idx){
+      var code = '學生' + (idx + 1);
+      NAME_MAP[code] = n;
+      return code;
+    });
+
+    var payload = { grade: target.grade, students: codes, items: target.items };
+    var skipped = parsed.filter(function(p){ return p !== target; })
+                        .map(function(p){ return p.grade + (p.fatal ? '（' + p.fatal + '）' : ''); });
+
+    google.script.run
+      .withSuccessHandler(function(res){ $('loading').style.display = 'none'; if (res && res.meta) res.meta.reportName = f.name; render(res, target, skipped); })
+      .withFailureHandler(function(e){ $('loading').style.display = 'none'; showMsg('伺服器錯誤：' + esc(e.message), 'box-err'); })
+      .analyzeReport(payload);
+  } catch (err){
+    $('loading').style.display = 'none';
+    showMsg(esc(err.message), 'box-err');
+  }
+});
+
+$('check').addEventListener('click', function(){
+  $('loading').style.display = 'inline';
+  google.script.run.withSuccessHandler(function(r){
+    $('loading').style.display = 'none';
+    var h = '<strong>' + (r.ok ? '設定檢查通過' : '設定有問題') + '</strong>（讀取時間 ' + esc(r.fetchedAt) + '）<br>';
+    var c = r.counts;
+    h += '指標對應 ' + c['指標對應'] + ' 列、別名 ' + c['評量重點別名'] + ' 列（已確認 ' + c['已確認別名'] +
+         '）、規則 ' + c['比對規則'] + ' 列、字詞主題 ' + c['字詞主題'] + ' 列、資源 ' + c['資源'] + ' 筆';
+    if (r.errors.length) h += '<br><br><strong>錯誤：</strong><br>' + r.errors.map(esc).join('<br>');
+    if (r.warnings.length) h += '<br><br><strong>提醒：</strong><br>' + r.warnings.map(esc).join('<br>');
+    showMsg(h, r.ok ? 'box-warn' : 'box-err');
+  }).withFailureHandler(function(e){
+    $('loading').style.display = 'none';
+    showMsg('檢查失敗：' + esc(e.message), 'box-err');
+  }).checkConfig();
+});
+
+// ---------- 輸出 ----------
+function pct(n){ return Math.round(n * 100) + '%'; }
+
+function isPractice(form){
+  return /遊戲|測驗|AI互動/.test(String(form || ''));
+}
+
+// 同一單元內的建議順序：簡報 → 影片 → 電子書 → 文件 → 遊戲/測驗 → AI互動 → 其他
+function formRank(form){
+  var f = String(form || '');
+  if (/簡報/.test(f)) return 1;
+  if (/影片/.test(f)) return 2;
+  if (/電子書/.test(f)) return 3;
+  if (/文件/.test(f)) return 4;
+  if (/遊戲|測驗/.test(f)) return 5;
+  if (/AI互動/.test(f)) return 6;
+  return 7;
+}
+
+function unitKind(type, unit){
+  if (/迷思/.test(String(type)) || /迷思|／|\//.test(String(unit)) && /迷思/.test(String(type))) return '常見錯誤與教學提醒';
+  if (/繪本/.test(String(type)) || /繪本/.test(String(unit))) return '繪本延伸';
+  if (/考古題|重點整理/.test(String(unit))) return '考古題與重點整理';
+  return '';
+}
+
+function linkItem(r){
+  var u = safeUrl(r.url);
+  return '<div class="ritem">' + (r.designated ? '<span class="desig">推薦先用</span>' : '') +
+         (u ? '<a href="' + esc(u) + '" target="_blank" rel="noopener">' + esc(r.name) + '</a>' : esc(r.name)) +
+         ' <span class="tag">' + esc(r.form) + '</span></div>';
+}
+
+function column(label, list, hintText){
+  if (!list.length) return '<div class="rcol"><div class="rlabel">' + label +
+    '</div><div class="tag">（這個單元沒有）</div></div>';
+  list.sort(function(a, b){
+    var d = (b.designated ? 1 : 0) - (a.designated ? 1 : 0);
+    return d !== 0 ? d : formRank(a.form) - formRank(b.form);
+  });
+  var h = '<div class="rcol"><div class="rlabel">' + label +
+          ' <span class="tag">' + hintText + '</span></div>';
+  for (var i = 0; i < list.length; i++){
+    h += (i >= 3 ? '<div class="more" style="display:none">' + linkItem(list[i]) + '</div>' : linkItem(list[i]));
+  }
+  if (list.length > 3){
+    h += '<button class="linkbtn" onclick="var p=this.parentNode;' +
+         'var m=p.querySelectorAll(\'.more\');for(var i=0;i<m.length;i++)m[i].style.display=\'\';' +
+         'this.style.display=\'none\';">＋ 另外 ' + (list.length - 3) + ' 筆</button>';
+  }
+  return h + '</div>';
+}
+
+function resHtml(res, openAll){
+  // 依單元分組
+  var order = [], byUnit = {};
+  for (var i = 0; i < res.links.length; i++){
+    var r = res.links[i], u = r.unit || '其他';
+    if (!byUnit[u]){ byUnit[u] = { unit: u, type: r.type, teach: [], practice: [], designated: false }; order.push(u); }
+    (isPractice(r.form) ? byUnit[u].practice : byUnit[u].teach).push(r);
+    if (r.designated) byUnit[u].designated = true;
+  }
+  // 有推薦資源的單元排前面，其次資源多的
+  order.sort(function(a, b){
+    var g = byUnit[a], k = byUnit[b];
+    var d = (k.designated ? 1 : 0) - (g.designated ? 1 : 0);
+    if (d !== 0) return d;
+    return (k.teach.length + k.practice.length) - (g.teach.length + g.practice.length);
+  });
+
+  var h = '';
+  for (var j = 0; j < order.length; j++){
+    var g2 = byUnit[order[j]];
+    var kind = unitKind(g2.type, g2.unit);
+    h += '<div class="unit">' +
+         '<div class="unit-head">' + esc(g2.unit) +
+         (kind ? '<span class="kind">' + esc(kind) + '</span>' : '') +
+         '<span class="tag">共 ' + (g2.teach.length + g2.practice.length) + ' 筆</span></div>' +
+         '<div class="unit-cols">' +
+         column('① 先教', g2.teach, '簡報、影片、電子書') +
+         column('② 再練', g2.practice, '遊戲、測驗、AI 互動') +
+         '</div></div>';
+  }
+  if (!res.links.length) h += '<div class="box-warn">這一項目前沒有可用的線上教材，需要自行準備。</div>';
+  if (res.hints.length){
+    h += '<div class="hint"><strong>教學提醒</strong>（文字提示，不是教材）：';
+    for (var k2 = 0; k2 < res.hints.length; k2++) h += '<div>・' + esc(res.hints[k2].name) + '</div>';
+    h += '</div>';
+  }
+  if (res.missing && res.missing.length){
+    h += '<div class="box-err">對照表指到的單元在試算表找不到：' + res.missing.map(esc).join('、') + '</div>';
+  }
+  return h;
+}
+
+function render(res, target, skipped){
+  if (!res.ok){ showMsg(res.errors.map(esc).join('<br>'), 'box-err'); return; }
+  var n = res.studentCount, h = '';
+
+  // ---- 這班最需要補的三件事 ----
+  var top = res.details.slice(0, 3);
+  h += '<div class="card"><h2>這個班最需要補的三件事</h2>' +
+       '<p class="muted">' + esc(res.grade) + '　·　全班 ' + n + ' 人　·　共 ' + res.itemCount + ' 題　·　' +
+       '依答對人數由少到多排序</p><ol class="top3">';
+  for (var t = 0; t < top.length; t++){
+    var d0 = top[t];
+    h += '<li><strong>' + esc(d0.plain) + '</strong><br>' +
+         '<span class="muted">' + n + ' 人中平均 ' + Math.round(d0.correct / d0.items.length) +
+         ' 人答對（' + pct(d0.rate) + '）' +
+         (d0.singleItem ? '，只有 1 題，僅供參考' : '') + '</span></li>';
+  }
+  h += '</ol><p class="muted">下面每一項都可以點開，裡面有這題考什麼、以及可以用的教材。</p></div>';
+
+  // ---- 逐項 ----
+  h += '<div class="card"><h2>各項目的表現與教材</h2>';
+  for (var i = 0; i < res.details.length; i++){
+    var d = res.details[i];
+    var flags = '';
+    if (d.singleItem) flags += '<span class="flag">只有 1 題</span>';
+    if (d.heterogeneous) flags += '<span class="flag warn">同類題目落差大，建議看原題</span>';
+    if (d.compositeCount) flags += '<span class="flag">含綜合題</span>';
+    var bar = Math.round(d.rate * 100);
+    h += '<details class="ind"' + (i < 3 ? ' open' : '') + '><summary>' +
+         '<div class="sum-line"><span class="plain">' + esc(d.plain) + '</span>' +
+         '<span class="score">' + d.correct + '／' + d.total + ' 人次答對（' + pct(d.rate) + '）</span></div>' +
+         '<div class="bar"><i style="width:' + bar + '%"></i></div>' +
+         '<div class="flags">' + flags + '<span class="code">' + esc(d.code) + '</span></div>' +
+         '</summary><div class="ind-body">';
+    h += '<div class="qs"><strong>這些題目在考這一項：</strong>';
+    for (var j = 0; j < d.items.length; j++){
+      var it = d.items[j];
+      h += '<div class="q">第 ' + it.no + ' 題（考' + esc(it.skills.join('、') || '—') + '）　' +
+           n + ' 人中 ' + it.correct + ' 人答對　<span class="tag">' + esc(it.focus) + '</span></div>';
+    }
+    h += '</div>';
+    if (d.coverage === '間接') h += '<div class="box-warn">這一項沒有專屬教材，下面是相近的替代資源。</div>';
+    h += resHtml(d.resources, false) + '</div></details>';
+  }
+  h += '</div>';
+
+  // ---- 學生 ----
+  h += '<div class="card"><h2>每位學生要補什麼</h2>' +
+       '<p class="muted">姓名是你的瀏覽器還原的，伺服器只看到代號。</p>' +
+       '<table><tr><th style="width:110px">學生</th><th style="width:70px">答錯</th><th>需要加強的項目</th></tr>';
+  for (var s2 = 0; s2 < res.perStudent.length; s2++){
+    var st = res.perStudent[s2];
+    var names = st.codes.map(function(c){
+      for (var k = 0; k < res.details.length; k++) if (res.details[k].code === c) return res.details[k].plain;
+      return c;
+    });
+    h += '<tr><td>' + esc(NAME_MAP[st.code] || st.code) + '</td><td>' +
+         (st.wrongItems.length ? st.wrongItems.length + ' 題' : '—') + '</td><td>' +
+         (names.length ? esc(names.join('；')) : '<span class="ok">全部答對</span>') + '</td></tr>';
+  }
+  h += '</table></div>';
+
+  // ---- 分組 ----
+  h += '<div class="card"><h2>可以一起補救的分組</h2>' +
+       '<p class="muted">錯同一項的學生放在一起，方便抽離小組上課。</p><table>' +
+       '<tr><th>要補的項目</th><th>學生</th></tr>';
+  var codes2 = Object.keys(res.groups).sort(function(a, b){
+    return res.groups[b].length - res.groups[a].length;
+  });
+  for (var g = 0; g < codes2.length; g++){
+    var plain = codes2[g];
+    for (var k2 = 0; k2 < res.details.length; k2++) if (res.details[k2].code === codes2[g]) plain = res.details[k2].plain;
+    var members = res.groups[codes2[g]].map(function(c){ return NAME_MAP[c] || c; });
+    h += '<tr><td>' + esc(plain) + '</td><td>' + esc(members.join('、')) + '　<strong>' + members.length + ' 人</strong></td></tr>';
+  }
+  h += '</table></div>';
+
+  // ---- 共通資源 ----
+  h += '<div class="card"><h2>各年級都可以用的資源</h2>' + resHtml(res.common, true) + '</div>';
+
+  // ---- 課程計畫表 ----
+  LAST = res;
+  h += '<div class="card noprint"><h2>課程計畫表</h2>' +
+       '<p class="muted">把上面的項目依「最弱先補」排進每週課程。週數自己填，' +
+       '一週排不完的會合併在同一週。</p>' +
+       '<div class="planbar">共 <input id="weeks" type="number" min="1" max="40" value="8" style="width:64px"> 週' +
+       '　<label><input type="checkbox" id="withNames" checked> 含學生名單</label>' +
+       '　<button class="btn" onclick="buildPlan()">產生計畫表</button>' +
+       '<button class="btn sec" onclick="downloadPlan(\'doc\')">下載 Word</button>' +
+       '<button class="btn sec" onclick="downloadPlan(\'csv\')">下載 Excel(CSV)</button></div>' +
+       '<div id="planArea"></div></div>';
+
+  // ---- 維護資訊（預設收合）----
+  var maint = '';
+  if (res.review.length){
+    maint += '<h3>沒有對應到項目的題目（不會產生建議）</h3><table><tr><th>題號</th><th>評量重點原文</th><th>原因</th></tr>';
+    for (var v = 0; v < res.review.length; v++){
+      maint += '<tr><td>' + res.review[v].no + '</td><td>' + esc(res.review[v].focus) +
+               '</td><td>' + esc(res.review[v].reason) + '</td></tr>';
+    }
+    maint += '</table>';
+  }
+  if (res.shadow.length){
+    maint += '<h3>別名與規則結果不一致</h3>';
+    for (var w = 0; w < res.shadow.length; w++){
+      maint += '第 ' + res.shadow[w].no + ' 題：別名 ' + esc(res.shadow[w].alias) +
+               '／規則 ' + esc(res.shadow[w].rules) + '<br>';
+    }
+  }
+  var hc = res.health;
+  if (hc.missingUnits.length){
+    maint += '<h3>對照表指到的單元在試算表找不到</h3>' + hc.missingUnits.map(esc).join('<br>');
+  }
+  if (hc.uncoveredUnits.length){
+    maint += '<h3>試算表有、對照表還沒收錄的單元</h3>' +
+             '<div class="muted">這些資源不會出現在任何建議中，請到「指標對應」工作表補一列。</div>' +
+             hc.uncoveredUnits.map(esc).join('<br>');
+  }
+  if (hc.duplicateNames.length){
+    maint += '<h3>同一單元內名稱重複的資源</h3>' + hc.duplicateNames.map(esc).join('<br>');
+  }
+  if (target.errs.length){
+    maint += '<h3>報表格式提醒</h3>' + target.errs.map(esc).join('<br>');
+  }
+  if (skipped && skipped.length){
+    maint += '<h3>未處理的工作表</h3>' + skipped.map(esc).join('<br>') +
+             '<div class="muted">第一階段只開放 4 年級，其他年級的比對規則還沒用真實報表驗證過。</div>';
+  }
+  maint += '<h3>資料版本</h3><div class="muted">試算表讀取時間 ' + esc(res.meta.fetchedAt) +
+           '　·　資源 ' + res.meta.resourceCount + ' 筆　·　已確認別名 ' + res.meta.confirmedAlias +
+           ' 筆　·　網站版本 ' + esc(res.meta.appVersion) + '</div>';
+
+  h += '<details class="card maint"><summary><strong>維護資訊</strong>' +
+       '<span class="muted">（給系統維護者，老師可以略過）</span></summary>' +
+       '<div class="maint-body">' + maint + '</div></details>';
+
+  h += '<div class="card noprint"><button class="btn sec" onclick="window.print()">列印／另存 PDF</button></div>';
+
+  $('result').innerHTML = h;
+}
+
+// ---------- 課程計畫表 ----------
+var LAST = null;
+
+function planRows(weeks, withNames){
+  var d = LAST.details.slice();          // 已依通過率由低到高
+  var perWeek = Math.ceil(d.length / weeks);
+  var rows = [], idx = 0;
+  for (var w = 1; w <= weeks && idx < d.length; w++){
+    var items = d.slice(idx, idx + perWeek);
+    idx += perWeek;
+    var content = [], resList = [], names = {}, notes = [];
+    for (var i = 0; i < items.length; i++){
+      var it = items[i];
+      content.push(it.plain);
+      // 每項最多帶 2 筆「先教」＋2 筆「再練」
+      var teach = [], practice = [];
+      for (var r = 0; r < it.resources.links.length; r++){
+        var res = it.resources.links[r];
+        (isPractice(res.form) ? practice : teach).push(res);
+      }
+      teach.sort(function(a,b){ return formRank(a.form) - formRank(b.form); });
+      practice.sort(function(a,b){ return formRank(a.form) - formRank(b.form); });
+      var pick = teach.slice(0, 2).concat(practice.slice(0, 2));
+      for (var q = 0; q < pick.length; q++){
+        resList.push({ name: pick[q].name, url: pick[q].url, unit: pick[q].unit,
+                       form: pick[q].form, use: isPractice(pick[q].form) ? '練習' : '教學' });
+      }
+      if (!it.resources.links.length) notes.push(it.plain + '：尚無現成教材，需自行準備');
+      if (it.singleItem) notes.push(it.plain + '：只有 1 題，證據不足，上課時再觀察');
+      if (it.heterogeneous) notes.push(it.plain + '：同類題目落差大，建議先看原題再決定重點');
+      var g = LAST.groups[it.code] || [];
+      for (var n = 0; n < g.length; n++) names[NAME_MAP[g[n]] || g[n]] = true;
+      var need = g.length;
+      notes.push(it.plain + '：需加強 ' + need + ' 人');
+    }
+    rows.push({
+      week: w, content: content, resources: resList,
+      students: withNames ? Object.keys(names) : [],
+      count: Object.keys(names).length, notes: notes
+    });
+  }
+  return rows;
+}
+
+function buildPlan(){
+  if (!LAST) return;
+  var weeks = Math.max(1, Math.min(40, parseInt($('weeks').value, 10) || 8));
+  var withNames = $('withNames').checked;
+  var rows = planRows(weeks, withNames);
+  var h = '<table class="plan"><tr><th style="width:52px">週次</th><th style="width:26%">課程內容</th>' +
+          '<th>使用資源</th><th style="width:22%">' + (withNames ? '需加強學生' : '需加強人數') + '</th></tr>';
+  for (var i = 0; i < rows.length; i++){
+    var r = rows[i];
+    h += '<tr><td>第 ' + r.week + ' 週</td><td>';
+    for (var c = 0; c < r.content.length; c++) h += '<div>・' + esc(r.content[c]) + '</div>';
+    h += '</td><td>';
+    for (var j = 0; j < r.resources.length; j++){
+      var rs = r.resources[j], u = safeUrl(rs.url);
+      h += '<div><span class="use">' + rs.use + '</span>' +
+           (u ? '<a href="' + esc(u) + '" target="_blank" rel="noopener">' + esc(rs.name) + '</a>' : esc(rs.name)) +
+           ' <span class="tag">' + esc(rs.unit) + '</span></div>';
+    }
+    if (!r.resources.length) h += '<span class="tag">（無現成教材）</span>';
+    h += '</td><td>' + (withNames ? esc(r.students.join('、')) + '<div class="tag">共 ' + r.count + ' 人</div>'
+                                  : r.count + ' 人') + '</td></tr>';
+  }
+  h += '</table>';
+  $('planArea').innerHTML = h;
+  return rows;
+}
+
+function planTitle(){
+  return LAST.grade + ' 英語學扶補救教學計畫（依 ' + (LAST.meta.reportName || '測驗報告') + ' 分析）';
+}
+
+function download(filename, mime, text){
+  var blob = new Blob(['\ufeff' + text], { type: mime });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a); a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+
+function downloadPlan(kind){
+  if (!LAST) return;
+  var weeks = Math.max(1, Math.min(40, parseInt($('weeks').value, 10) || 8));
+  var withNames = $('withNames').checked;
+  var rows = planRows(weeks, withNames);
+  var stamp = new Date().toISOString().slice(0, 10);
+  var base = LAST.grade + '_英語學扶課程計畫_' + stamp + (withNames ? '_含名單' : '');
+
+  if (kind === 'csv'){
+    var lines = [['週次', '課程內容', '使用資源', '資源網址',
+                  withNames ? '需加強學生' : '需加強人數', '備註']];
+    for (var i = 0; i < rows.length; i++){
+      var r = rows[i];
+      lines.push([
+        '第' + r.week + '週',
+        r.content.join('\n'),
+        r.resources.map(function(x){ return '[' + x.use + ']' + x.name + '（' + x.unit + '）'; }).join('\n'),
+        r.resources.map(function(x){ return x.url; }).join('\n'),
+        withNames ? r.students.join('、') : (r.count + ' 人'),
+        r.notes.join('\n')
+      ]);
+    }
+    var csv = lines.map(function(line){
+      return line.map(function(c){ return '"' + String(c).replace(/"/g, '""') + '"'; }).join(',');
+    }).join('\r\n');
+    download(base + '.csv', 'text/csv;charset=utf-8', csv);
+    return;
+  }
+
+  var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" ' +
+    'xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">' +
+    '<head><meta charset="utf-8"><title>' + esc(planTitle()) + '</title>' +
+    '<style>body{font-family:"Microsoft JhengHei",sans-serif;font-size:11pt}' +
+    'table{border-collapse:collapse;width:100%}th,td{border:1px solid #888;padding:5px 7px;' +
+    'vertical-align:top;font-size:10pt}th{background:#eef2ff}h1{font-size:15pt}' +
+    '.u{color:#555;font-size:9pt}.n{color:#666;font-size:9pt}</style></head><body>';
+  html += '<h1>' + esc(planTitle()) + '</h1>';
+  html += '<p class="n">全班 ' + LAST.studentCount + ' 人　·　共 ' + LAST.itemCount + ' 題　·　' +
+          '排入 ' + rows.length + ' 週　·　製表日期 ' + stamp + '</p>';
+  html += '<table><tr><th style="width:8%">週次</th><th style="width:24%">課程內容</th>' +
+          '<th>使用資源</th><th style="width:20%">' + (withNames ? '需加強學生' : '需加強人數') +
+          '</th></tr>';
+  for (var k = 0; k < rows.length; k++){
+    var r2 = rows[k];
+    html += '<tr><td>第 ' + r2.week + ' 週</td><td>';
+    for (var c2 = 0; c2 < r2.content.length; c2++) html += '<div>・' + esc(r2.content[c2]) + '</div>';
+    html += '</td><td>';
+    for (var j2 = 0; j2 < r2.resources.length; j2++){
+      var rs2 = r2.resources[j2], u2 = safeUrl(rs2.url);
+      html += '<div>［' + rs2.use + '］' +
+              (u2 ? '<a href="' + esc(u2) + '">' + esc(rs2.name) + '</a>' : esc(rs2.name)) +
+              ' <span class="u">' + esc(rs2.unit) + '</span></div>';
+    }
+    if (!r2.resources.length) html += '（無現成教材）';
+    html += '</td><td>' + (withNames ? esc(r2.students.join('、')) + '<div class="n">共 ' + r2.count + ' 人</div>'
+                                     : r2.count + ' 人') + '</td></tr>';
+    html += '<tr><td></td><td colspan="3" class="n">備註：' + esc(r2.notes.join('；')) + '</td></tr>';
+  }
+  html += '</table>';
+  html += '<p class="n">資料來源：新北英語學扶數位資源庫（' + esc(LAST.meta.fetchedAt) + ' 讀取）。' +
+          '本表依學習扶助測驗報告的評量重點對應基本學習內容細項產生，僅供教學參考。</p>';
+  if (withNames) html += '<p class="n">※ 本檔含學生姓名，請妥善保管，不要放在共用雲端資料夾。</p>';
+  html += '</body></html>';
+  download(base + '.doc', 'application/msword;charset=utf-8', html);
+}
+
+// 頁尾版本
+document.addEventListener('DOMContentLoaded', function(){
+  if (typeof google !== 'undefined' && google.script){
+    google.script.run.withSuccessHandler(function(info){
+      if (!info) return;
+      $('appVer').textContent = info.version;
+      $('appUpd').textContent = info.updated;
+    }).getAppInfo();
+  }
+});
+</script>

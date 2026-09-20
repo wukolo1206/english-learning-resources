@@ -1,6 +1,22 @@
+// ====== 版本資訊（部署前務必更新這兩行）======
+var APP_VERSION = '@25';
+var APP_UPDATED = '2026-09-20';
+
+// 前端頁尾用
+function getAppInfo() {
+  return { version: APP_VERSION, updated: APP_UPDATED };
+}
+
 // 1. 產生網頁 HTML
 function doGet(e) {
   var page = e && e.parameter && e.parameter.page;
+  if (page === 'report') {
+    return HtmlService.createTemplateFromFile('index_report')
+        .evaluate()
+        .setTitle('學扶報表 → 教學資源建議')
+        .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
+        .addMetaTag('viewport', 'width=device-width, initial-scale=1');
+  }
   if (page === 'scroll') {
     return HtmlService.createHtmlOutputFromFile('index_scroll')
         .setTitle('英語學扶數位資源搜尋')
@@ -94,11 +110,17 @@ function getDataFromSheet() {
 
     return {
       resources: cleanData,
-      logs: getChangelog()
+      logs: getChangelog(),
+      appInfo: getAppInfo()
     };
 
   } catch (e) {
     // 將後端錯誤丟給前端顯示
     throw new Error(e.toString());
   }
+}
+
+// 供 HTML 樣板引入其他檔案
+function include(filename) {
+  return HtmlService.createHtmlOutputFromFile(filename).getContent();
 }

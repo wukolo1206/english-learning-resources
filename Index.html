@@ -112,7 +112,8 @@
       <i class="fas fa-bell"></i><span class="bell-badge" id="bellBadge"></span>
   </button>
   <h1><i class="fas fa-search me-2"></i>新北英語學扶數位資源庫</h1>
-  <p class="mb-0">編輯團隊：新北市更寮國小吳國榮、王筱瑛、屏東縣竹田國小劉蘋老師</p>
+  <p class="mb-0">編輯團隊：新北市碧華國小吳國榮、新北市更寮國小王筱瑛、屏東縣竹田國小劉蘋老師</p>
+  <p class="mb-0 mt-2"><a href="?page=report" style="color:#fff;text-decoration:underline">📊 上傳學扶測驗報表，產生教學建議與課程計畫</a></p>
 </div>
 
 <div class="container-fluid px-4">
@@ -439,5 +440,18 @@
   }
 </script>
 
+<footer id="appFooter" style="text-align:center;padding:14px 12px 20px;font-size:0.78rem;color:#64748b;line-height:1.7;">新北英語學扶數位資源庫　·　版本 <span id="appVer">—</span>　·　更新時間 <span id="appUpd">—</span></footer>
+<script>
+// 頁尾版本資訊（版本來源：Code.js 的 APP_VERSION / APP_UPDATED）
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof google !== 'undefined' && google.script) {
+        google.script.run.withSuccessHandler(function(info) {
+            if (!info) return;
+            document.getElementById('appVer').textContent = info.version;
+            document.getElementById('appUpd').textContent = info.updated;
+        }).getAppInfo();
+    }
+});
+</script>
 </body>
 </html>
