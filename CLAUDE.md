@@ -2,7 +2,7 @@
 project: 英語學扶資源
 category: GAS學習扶助
 status: 維護中
-version: "@25"
+version: "@26"
 url: https://script.google.com/macros/s/AKfycbz9yWdBRA26XbOAOsHkOsBwUP6Ul2bw-zCbYaB94z1431R28FVyFZ_xN_FY6Iw_9vYaIg/exec
 next_action: "報表對應功能已上線 @25；待簽核『評量重點別名』19 列、補六年級 ea 與篇章資源"
 updated: 2026-09-20
@@ -72,6 +72,7 @@ clasp deploy --deploymentId AKfycbz9yWdBRA26XbOAOsHkOsBwUP6Ul2bw-zCbYaB94z1431R2
 - **鈴鐺通知**：`localStorage('changelog_last_read')` 比對最新日期，新內容才亮紅點，點開後更新已讀
 - **樹狀目錄手風琴**：年級→領域→類型→單元三層，同層只能展開一個
 - **點選 nav-link 跳錯年級**：手風琴收合會讓頁面驟縮，必用 `e.preventDefault() + scrollIntoView()`，不要用原生 `<a href="#anchor">`
+- **頁面之間的連結不可用相對路徑**：GAS 跑在 iframe 裡，相對連結會失效。一律用 `getAppInfo().url`（後端 `ScriptApp.getService().getUrl()`）組完整網址，並加 `target="_top"`
 - **type === unit 跳過一層**：例如「考古題 / 考古題」名稱相同時，直接顯示資源卡片，不要再渲染重複手風琴
 
 ---

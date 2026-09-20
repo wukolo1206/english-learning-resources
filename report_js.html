@@ -667,6 +667,8 @@ document.addEventListener('DOMContentLoaded', function(){
       if (!info) return;
       $('appVer').textContent = info.version;
       $('appUpd').textContent = info.updated;
+      var bl = $('backLink');
+      if (bl && info.url) { bl.href = info.url + '?page=scroll'; }
     }).getAppInfo();
   }
 });

@@ -113,7 +113,7 @@
   </button>
   <h1><i class="fas fa-search me-2"></i>新北英語學扶數位資源庫</h1>
   <p class="mb-0">編輯團隊：新北市碧華國小吳國榮、新北市更寮國小王筱瑛、屏東縣竹田國小劉蘋老師</p>
-  <p class="mb-0 mt-2"><a href="?page=report" style="color:#fff;text-decoration:underline">📊 上傳學扶測驗報表，產生教學建議與課程計畫</a></p>
+  <p class="mb-0 mt-2"><a id="reportLink" href="#" target="_top" style="color:#fff;text-decoration:underline">📊 上傳學扶測驗報表，產生教學建議與課程計畫</a></p>
 </div>
 
 <div class="container-fluid px-4">
@@ -449,6 +449,8 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!info) return;
             document.getElementById('appVer').textContent = info.version;
             document.getElementById('appUpd').textContent = info.updated;
+            var rl = document.getElementById('reportLink');
+            if (rl && info.url) { rl.href = info.url + '?page=report'; }
         }).getAppInfo();
     }
 });

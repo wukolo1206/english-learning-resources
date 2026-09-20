@@ -483,7 +483,7 @@
         </div>
     </div>
     <div class="right-group">
-        <a href="?page=report" class="editors-chip" style="text-decoration:none;color:var(--primary,#4361ee);font-weight:600">📊 報表建議</a>
+        <a id="reportLink" href="#" target="_top" class="editors-chip" style="text-decoration:none;color:var(--primary,#4361ee);font-weight:600">📊 報表建議</a>
         <div class="editors-chip">碧華國小吳國榮 ・ 更寮國小王筱瑛 ・ 竹田國小劉蘋老師</div>
         <button class="bell-btn" id="bellBtn" title="最新消息">
             <i class="fas fa-bell"></i>
@@ -881,6 +881,8 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!info) return;
             document.getElementById('appVer').textContent = info.version;
             document.getElementById('appUpd').textContent = info.updated;
+            var rl = document.getElementById('reportLink');
+            if (rl && info.url) { rl.href = info.url + '?page=report'; }
         }).getAppInfo();
     }
 });

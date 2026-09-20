@@ -1,10 +1,12 @@
 // ====== 版本資訊（部署前務必更新這兩行）======
-var APP_VERSION = '@25';
+var APP_VERSION = '@26';
 var APP_UPDATED = '2026-09-20';
 
 // 前端頁尾用
 function getAppInfo() {
-  return { version: APP_VERSION, updated: APP_UPDATED };
+  var url = '';
+  try { url = ScriptApp.getService().getUrl(); } catch (e) { url = ''; }
+  return { version: APP_VERSION, updated: APP_UPDATED, url: url };
 }
 
 // 1. 產生網頁 HTML
