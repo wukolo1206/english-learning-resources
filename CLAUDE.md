@@ -2,10 +2,10 @@
 project: 英語學扶資源
 category: GAS學習扶助
 status: 維護中
-version: "@26"
+version: "@28"
 url: https://script.google.com/macros/s/AKfycbz9yWdBRA26XbOAOsHkOsBwUP6Ul2bw-zCbYaB94z1431R28FVyFZ_xN_FY6Iw_9vYaIg/exec
-next_action: "報表對應功能已上線 @25；待簽核『評量重點別名』19 列、補六年級 ea 與篇章資源"
-updated: 2026-09-20
+next_action: "@28 已開放三～六年級並修好計畫表週數；A020–A023 已簽核；待簽核原 19 列四年級別名、建三五六年級 golden set"
+updated: 2026-09-30
 ---
 
 # CLAUDE.md — 新北英語學扶資源庫
