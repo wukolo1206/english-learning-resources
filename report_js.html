@@ -183,12 +183,18 @@ function extractSheet(sheet){
   for (var r = headRow + 1; r < grid.length; r++){
     var row = grid[r];
     var noRaw = String(row[col.no] || '').trim();
-    if (!/^\d+$/.test(noRaw)) continue;
-    var no = parseInt(noRaw, 10);
+    // 三年級字母題的題號是「1大寫」「1小寫」
+    var nm2 = /^(\d+)(大寫|小寫)?$/.exec(noRaw);
+    if (!nm2){
+      if (noRaw && String(row[col.focus] || '').trim()) errs.push('第 ' + (r + 1) + ' 列題號「' + noRaw + '」無法辨識，這一題沒有納入分析');
+      continue;
+    }
+    var num = parseInt(nm2[1], 10);
+    var no = nm2[2] ? noRaw : num;
     if (seen[no]) { errs.push('題號 ' + no + ' 重複'); continue; }
     seen[no] = true;
-    if (prev !== null && no !== prev + 1) errs.push('題號不連續：' + prev + ' → ' + no + '（僅提醒，仍會處理）');
-    prev = no;
+    if (prev !== null && num !== prev && num !== prev + 1) errs.push('題號不連續：' + prev + ' → ' + num + '（僅提醒，仍會處理）');
+    prev = num;
 
     var marks = [], bad = 0;
     for (var m = 0; m < names.length; m++){
@@ -214,7 +220,15 @@ function extractSheet(sheet){
     });
   }
   if (!items.length) throw new Error('這張工作表沒有題目資料。');
-  return { grade: sheet.name, names: names.map(function(n){ return n.name; }), items: items, errs: errs };
+  // 月份從標題列抓（例：「學習扶助評量系統 - 202512 英語 - …」）；12 月報表考前一個年級
+  var month = '';
+  for (var hr = 0; hr < headRow && !month; hr++){
+    for (var hc = 0; hc < grid[hr].length && !month; hc++){
+      var mm2 = /(20\d{2})(0[1-9]|1[0-2])/.exec(String(grid[hr][hc] || ''));
+      if (mm2) month = mm2[2];
+    }
+  }
+  return { grade: sheet.name, month: month, names: names.map(function(n){ return n.name; }), items: items, errs: errs };
 }
 
 // ---------- 主流程 ----------
@@ -244,7 +258,11 @@ $('run').addEventListener('click', async function(){
       return code;
     });
 
-    var payload = { grade: target.grade, students: codes, items: target.items };
+    if (!target.month){
+      var fm = /(20\d{2})(0[1-9]|1[0-2])/.exec(f.name);
+      if (fm) target.month = fm[2];
+    }
+    var payload = { grade: target.grade, month: target.month, students: codes, items: target.items };
     var skipped = parsed.filter(function(p){ return p !== target; })
                         .map(function(p){ return p.grade + (p.fatal ? '（' + p.fatal + '）' : ''); });
 
@@ -370,6 +388,15 @@ function resHtml(res, openAll){
   return h;
 }
 
+// 考題年級和工作表年級不同時（例如 12 月報表考前一年級）才標出來
+function gradeNote(grades, sheetGrade){
+  if (!grades || !grades.length) return '';
+  var cn = { '3':'三', '4':'四', '5':'五', '6':'六' };
+  var sg = String(sheetGrade || '').charAt(0);
+  if (grades.length === 1 && grades[0] === sg) return '';
+  return grades.map(function(g){ return cn[g] || g; }).join('、') + '年級內容・';
+}
+
 function render(res, target, skipped){
   if (!res.ok){ showMsg(res.errors.map(esc).join('<br>'), 'box-err'); return; }
   var n = res.studentCount, h = '';
@@ -406,7 +433,7 @@ function render(res, target, skipped){
     h += '<div class="qs"><strong>這些題目在考這一項：</strong>';
     for (var j = 0; j < d.items.length; j++){
       var it = d.items[j];
-      h += '<div class="q">第 ' + it.no + ' 題（考' + esc(it.skills.join('、') || '—') + '）　' +
+      h += '<div class="q">第 ' + esc(it.no) + ' 題（' + gradeNote(it.grades, res.grade) + '考' + esc(it.skills.join('、') || '—') + '）　' +
            n + ' 人中 ' + it.correct + ' 人答對　<span class="tag">' + esc(it.focus) + '</span></div>';
     }
     h += '</div>';
@@ -452,9 +479,13 @@ function render(res, target, skipped){
   // ---- 課程計畫表 ----
   LAST = res;
   h += '<div class="card noprint"><h2>課程計畫表</h2>' +
-       '<p class="muted">把上面的項目依「最弱先補」排進每週課程。週數自己填，' +
-       '一週排不完的會合併在同一週。</p>' +
+       '<p class="muted">把上面的項目依「最弱先補」排進每週課程。週數自己填，每一週都會排到；' +
+       '項目比週數多時，最弱的項目那幾週排得比較少。</p>' +
        '<div class="planbar">共 <input id="weeks" type="number" min="1" max="40" value="8" style="width:64px"> 週' +
+       '　<label>週數比項目多時 <select id="extraMode">' +
+       '<option value="double">最弱的項目多排幾週（先教學、再練習）</option>' +
+       '<option value="review">最後幾週當總複習</option>' +
+       '<option value="short">不補滿，只排項目數的週數</option></select></label>' +
        '　<label><input type="checkbox" id="withNames" checked> 含學生名單</label>' +
        '　<button class="btn" onclick="buildPlan()">產生計畫表</button>' +
        '<button class="btn sec" onclick="downloadPlan(\'doc\')">下載 Word</button>' +
@@ -466,7 +497,7 @@ function render(res, target, skipped){
   if (res.review.length){
     maint += '<h3>沒有對應到項目的題目（不會產生建議）</h3><table><tr><th>題號</th><th>評量重點原文</th><th>原因</th></tr>';
     for (var v = 0; v < res.review.length; v++){
-      maint += '<tr><td>' + res.review[v].no + '</td><td>' + esc(res.review[v].focus) +
+      maint += '<tr><td>' + esc(res.review[v].no) + '</td><td>' + esc(res.review[v].focus) +
                '</td><td>' + esc(res.review[v].reason) + '</td></tr>';
     }
     maint += '</table>';
@@ -474,7 +505,7 @@ function render(res, target, skipped){
   if (res.shadow.length){
     maint += '<h3>別名與規則結果不一致</h3>';
     for (var w = 0; w < res.shadow.length; w++){
-      maint += '第 ' + res.shadow[w].no + ' 題：別名 ' + esc(res.shadow[w].alias) +
+      maint += '第 ' + esc(res.shadow[w].no) + ' 題：別名 ' + esc(res.shadow[w].alias) +
                '／規則 ' + esc(res.shadow[w].rules) + '<br>';
     }
   }
@@ -495,7 +526,7 @@ function render(res, target, skipped){
   }
   if (skipped && skipped.length){
     maint += '<h3>未處理的工作表</h3>' + skipped.map(esc).join('<br>') +
-             '<div class="muted">第一階段只開放 4 年級，其他年級的比對規則還沒用真實報表驗證過。</div>';
+             '<div class="muted">一次只分析一個年級的工作表，其他年級請另外上傳。</div>';
   }
   maint += '<h3>資料版本</h3><div class="muted">試算表讀取時間 ' + esc(res.meta.fetchedAt) +
            '　·　資源 ' + res.meta.resourceCount + ' 筆　·　已確認別名 ' + res.meta.confirmedAlias +
@@ -513,26 +544,67 @@ function render(res, target, skipped){
 // ---------- 課程計畫表 ----------
 var LAST = null;
 
-function planRows(weeks, withNames){
-  var d = LAST.details.slice();          // 已依通過率由低到高
-  var perWeek = Math.ceil(d.length / weeks);
-  var rows = [], idx = 0;
-  for (var w = 1; w <= weeks && idx < d.length; w++){
-    var items = d.slice(idx, idx + perWeek);
-    idx += perWeek;
-    var content = [], resList = [], names = {}, notes = [];
-    for (var i = 0; i < items.length; i++){
-      var it = items[i];
-      content.push(it.plain);
-      // 每項最多帶 2 筆「先教」＋2 筆「再練」
-      var teach = [], practice = [];
-      for (var r = 0; r < it.resources.links.length; r++){
-        var res = it.resources.links[r];
-        (isPractice(res.form) ? practice : teach).push(res);
+// 每週要上的內容：{ item, phase }，phase = all（教＋練）/ teach / practice
+function planSlots(d, weeks, mode){
+  var n = d.length, slots = [], w, i;
+  if (weeks <= n){
+    // 每週都排到；除不盡時多出來的項目放在後面幾週，最弱的項目那幾週排得少、時間多
+    var base = Math.floor(n / weeks), rem = n % weeks, idx = 0;
+    for (w = 0; w < weeks; w++){
+      var size = base + (w >= weeks - rem ? 1 : 0), wk = [];
+      for (i = 0; i < size; i++) wk.push({ item: d[idx++], phase: 'all' });
+      slots.push(wk);
+    }
+    return slots;
+  }
+  if (mode === 'double'){
+    // 週數比項目多：多的週數分給最弱的項目，第一週教學、之後練習
+    var per = Math.floor(weeks / n), extra = weeks % n;
+    for (i = 0; i < n; i++){
+      var span = per + (i < extra ? 1 : 0);
+      for (w = 0; w < span; w++){
+        slots.push([{ item: d[i], phase: span === 1 ? 'all' : (w === 0 ? 'teach' : 'practice'),
+                      round: w + 1, span: span }]);
       }
-      teach.sort(function(a,b){ return formRank(a.form) - formRank(b.form); });
-      practice.sort(function(a,b){ return formRank(a.form) - formRank(b.form); });
-      var pick = teach.slice(0, 2).concat(practice.slice(0, 2));
+    }
+    return slots;
+  }
+  for (i = 0; i < n; i++) slots.push([{ item: d[i], phase: 'all' }]);
+  if (mode === 'review') for (w = n; w < weeks; w++) slots.push([{ review: true }]);
+  return slots;
+}
+
+function pickRes(it, phase){
+  var teach = [], practice = [];
+  for (var r = 0; r < it.resources.links.length; r++){
+    var res = it.resources.links[r];
+    (isPractice(res.form) ? practice : teach).push(res);
+  }
+  teach.sort(function(a,b){ return formRank(a.form) - formRank(b.form); });
+  practice.sort(function(a,b){ return formRank(a.form) - formRank(b.form); });
+  if (phase === 'teach') return teach.length ? teach.slice(0, 3) : practice.slice(0, 3);
+  if (phase === 'practice') return practice.length ? practice.slice(0, 3) : teach.slice(0, 3);
+  return teach.slice(0, 2).concat(practice.slice(0, 2));   // 每項最多 2 筆「先教」＋2 筆「再練」
+}
+
+function planRows(weeks, withNames, mode){
+  var d = LAST.details.slice();          // 已依通過率由低到高
+  var slots = planSlots(d, weeks, mode);
+  var rows = [];
+  for (var w = 0; w < slots.length; w++){
+    var content = [], resList = [], names = {}, notes = [];
+    for (var i = 0; i < slots[w].length; i++){
+      var s = slots[w][i];
+      if (s.review){
+        content.push('總複習：回顧前面各週內容，由老師依學生狀況安排');
+        for (var cd in LAST.groups) for (var z = 0; z < LAST.groups[cd].length; z++) names[NAME_MAP[LAST.groups[cd][z]] || LAST.groups[cd][z]] = true;
+        continue;
+      }
+      var it = s.item;
+      var label = it.plain;
+      if (s.span > 1) label += s.phase === 'teach' ? '（第 1 週：教學）' : '（第 ' + s.round + ' 週：練習）';
+      content.push(label);
+      var pick = pickRes(it, s.phase);
       for (var q = 0; q < pick.length; q++){
         resList.push({ name: pick[q].name, url: pick[q].url, unit: pick[q].unit,
                        form: pick[q].form, use: isPractice(pick[q].form) ? '練習' : '教學' });
@@ -542,11 +614,10 @@ function planRows(weeks, withNames){
       if (it.heterogeneous) notes.push(it.plain + '：同類題目落差大，建議先看原題再決定重點');
       var g = LAST.groups[it.code] || [];
       for (var n = 0; n < g.length; n++) names[NAME_MAP[g[n]] || g[n]] = true;
-      var need = g.length;
-      notes.push(it.plain + '：需加強 ' + need + ' 人');
+      notes.push(it.plain + '：需加強 ' + g.length + ' 人');
     }
     rows.push({
-      week: w, content: content, resources: resList,
+      week: w + 1, content: content, resources: resList,
       students: withNames ? Object.keys(names) : [],
       count: Object.keys(names).length, notes: notes
     });
@@ -554,11 +625,16 @@ function planRows(weeks, withNames){
   return rows;
 }
 
+function planMode(){
+  var el = $('extraMode');
+  return el ? el.value : 'double';
+}
+
 function buildPlan(){
   if (!LAST) return;
   var weeks = Math.max(1, Math.min(40, parseInt($('weeks').value, 10) || 8));
   var withNames = $('withNames').checked;
-  var rows = planRows(weeks, withNames);
+  var rows = planRows(weeks, withNames, planMode());
   var h = '<table class="plan"><tr><th style="width:52px">週次</th><th style="width:26%">課程內容</th>' +
           '<th>使用資源</th><th style="width:22%">' + (withNames ? '需加強學生' : '需加強人數') + '</th></tr>';
   for (var i = 0; i < rows.length; i++){
@@ -577,6 +653,7 @@ function buildPlan(){
                                   : r.count + ' 人') + '</td></tr>';
   }
   h += '</table>';
+  if (rows.length < weeks) h = '<div class="box-warn">這次只有 ' + rows.length + ' 個項目要補，所以只排了 ' + rows.length + ' 週。</div>' + h;
   $('planArea').innerHTML = h;
   return rows;
 }
@@ -598,7 +675,7 @@ function downloadPlan(kind){
   if (!LAST) return;
   var weeks = Math.max(1, Math.min(40, parseInt($('weeks').value, 10) || 8));
   var withNames = $('withNames').checked;
-  var rows = planRows(weeks, withNames);
+  var rows = planRows(weeks, withNames, planMode());
   var stamp = new Date().toISOString().slice(0, 10);
   var base = LAST.grade + '_英語學扶課程計畫_' + stamp + (withNames ? '_含名單' : '');
 

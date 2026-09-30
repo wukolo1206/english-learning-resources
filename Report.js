@@ -46,6 +46,25 @@ function gradeCN_(g) {
   return cn[gradeNum_(g)] || String(g);
 }
 
+// 考題年級看評量重點文字，不看工作表名稱：12 月的測驗考前一個年級的內容
+function contentGrades_(focus, sheetGrade, month) {
+  var cn = { '三': '3', '四': '4', '五': '5', '六': '6' };
+  var out = [], re = /([三四五六])年級/g, m;
+  while ((m = re.exec(String(focus || '')))) if (out.indexOf(cn[m[1]]) < 0) out.push(cn[m[1]]);
+  if (out.length) return out.sort();
+  var g = parseInt(gradeNum_(sheetGrade), 10);
+  if (String(month) === '12' && g > 3) g--;
+  return [String(g)];
+}
+
+// 題號可能是 25 或「1大寫」：先比數字再比文字
+function itemOrder_(a, b) {
+  var d = parseInt(a, 10) - parseInt(b, 10);
+  if (d) return d;
+  a = String(a); b = String(b);
+  return a < b ? -1 : (a > b ? 1 : 0);
+}
+
 function splitList_(v) {
   var s = String(v == null ? '' : v).trim();
   if (!s) return [];
@@ -166,6 +185,9 @@ function loadConfig_() {
       try { new RegExp(ru['比對內容']); }
       catch (err) { cfg.errors.push('比對規則 ' + ru['規則ID'] + ' 的正規表示式無法編譯'); }
     }
+    if (ru['比對方式'] === '字母範圍' && !/^[A-Za-z]\s*-\s*[A-Za-z]$/.test(ru['比對內容'])) {
+      cfg.errors.push('比對規則 ' + ru['規則ID'] + ' 的字母範圍格式應為「A-F」：' + ru['比對內容']);
+    }
   }
 
   cfg.fetchedAt = Utilities.formatDate(new Date(), 'Asia/Taipei', 'yyyy-MM-dd HH:mm');
@@ -232,9 +254,17 @@ function healthCheck_(cfg) {
 }
 
 // ---------- 比對（規格 5）----------
-function matchRow_(cfg, grade, category, focus) {
-  var key = gradeCN_(grade) + '' + category + '' + canon_(focus);
-  var ruleResult = matchByRules_(cfg, grade, category, focus);
+function matchRow_(cfg, grades, category, focus) {
+  // 別名以最高的考題年級為鍵；規則則每個考題年級各跑一次再合併
+  var key = gradeCN_(grades[grades.length - 1]) + '' + category + '' + canon_(focus);
+  var ruleResult = { codes: [], hits: [], conflict: false, reason: '' };
+  for (var g = 0; g < grades.length; g++) {
+    var r = matchByRules_(cfg, grades[g], category, focus);
+    for (var c = 0; c < r.codes.length; c++) if (ruleResult.codes.indexOf(r.codes[c]) < 0) ruleResult.codes.push(r.codes[c]);
+    ruleResult.hits = ruleResult.hits.concat(r.hits || []);
+    if (r.conflict) ruleResult.conflict = true;
+    if (r.reason) ruleResult.reason = r.reason;
+  }
 
   var al = cfg.aliasIndex[key];
   if (al) {
@@ -256,6 +286,13 @@ function matchRow_(cfg, grade, category, focus) {
 }
 
 function matchByRules_(cfg, grade, category, focus) {
+  // 「篇章/文本」題多半寫的是句型：先用句型規則找資源，找不到才歸到 N-篇章-1
+  if (canon_(category) === canon_('篇章/文本')) {
+    var viaSentence = matchByRules_(cfg, grade, '文法句構/字詞', focus);
+    if (viaSentence.codes.length || viaSentence.conflict) return viaSentence;
+    var essay = gradeNum_(grade) + '-篇章-1';
+    if (cfg.indIndex[essay]) return { codes: [essay], hits: ['fallback-篇章'], conflict: false };
+  }
   var text = canon_(focus);
   var codes = [], hits = [], exclusiveHits = [], reason = '';
   for (var i = 0; i < cfg.rules.length; i++) {
@@ -267,22 +304,37 @@ function matchByRules_(cfg, grade, category, focus) {
     var matched = false, outs = splitList_(ru['輸出細項']);
     var pat = ru['比對方式'];
     if (pat === '正規表示式') {
-      var re = new RegExp(ru['比對內容']);
-      var m = re.exec(String(focus));
-      if (m) {
-        // 字詞主題：抽出主題 → 主題別名 → 字詞主題
-        var theme = m[1] ? m[1].trim() : '';
+      // 字詞主題：抽出所有「跟X相關」，X 再依「、」拆開 → 主題別名 → 字詞主題；每個都要查得到
+      var re = new RegExp(ru['比對內容'], 'g'), m, themes = [];
+      while ((m = re.exec(String(focus)))) {
+        if (m[1]) themes = themes.concat(m[1].split(/[、,，]/));
+        if (!m[0]) break;
+      }
+      var themeOuts = [], unknown = [];
+      for (var t = 0; t < themes.length; t++) {
+        var theme = themes[t].trim();
+        if (!theme) continue;
         var mapped = cfg.themeIndex[gradeCN_(grade) + '' + canon_(theme)];
-        if (!mapped) {
-          // 直接當成標籤試一次
-          if (cfg.wordThemes[gradeCN_(grade) + '' + theme]) mapped = theme;
-        }
+        if (!mapped && cfg.wordThemes[gradeCN_(grade) + '' + theme]) mapped = theme;
         if (mapped && cfg.wordThemes[gradeCN_(grade) + '' + mapped]) {
-          matched = true;
-          outs = [gradeNum_(grade) + '-字詞-' + mapped];
+          var tc = gradeNum_(grade) + '-字詞-' + mapped;
+          if (themeOuts.indexOf(tc) < 0) themeOuts.push(tc);
         } else {
-          reason = '報表主題「' + theme + '」在主題別名與字詞主題都查不到';
+          unknown.push(theme);
         }
+      }
+      if (themeOuts.length && !unknown.length) {
+        matched = true;
+        outs = themeOuts;
+      } else if (unknown.length) {
+        reason = '報表主題「' + unknown.join('、') + '」在主題別名與字詞主題都查不到';
+      }
+    } else if (pat === '字母範圍') {
+      var lm = /字母\s*([A-Za-z])\s*之/.exec(String(focus));
+      var rg = /^([A-Za-z])\s*-\s*([A-Za-z])$/.exec(String(ru['比對內容']).trim());
+      if (lm && rg) {
+        var L = lm[1].toUpperCase();
+        matched = L >= rg[1].toUpperCase() && L <= rg[2].toUpperCase();
       }
     } else if (pat === '精確') {
       matched = (text === canon_(ru['比對內容']));
@@ -323,10 +375,10 @@ function analyzeReport(payload) {
   var students = payload.students || [];
   var items = payload.items || [];
 
-  var ALLOWED = ['4'];
+  var month = String(payload.month || '').replace(/^0/, '');
+  var ALLOWED = ['3', '4', '5', '6'];
   if (ALLOWED.indexOf(gradeNum_(grade)) < 0) {
-    return { ok: false, notVerifiedGrade: true, grade: grade,
-      errors: ['第一階段只開放 4 年級。' + grade + ' 的比對規則尚未用真實報表驗證過，為避免給出未驗證的建議，這個年級不予處理。'] };
+    return { ok: false, grade: grade, errors: ['無法辨識報表年級：' + grade] };
   }
 
   var health = healthCheck_(cfg);
@@ -344,9 +396,10 @@ function analyzeReport(payload) {
     if (/(^|[^0-9])1-/.test(perf)) skills.push('聽');
     if (/(^|[^0-9])3-/.test(perf)) skills.push('讀');
 
-    var m = matchRow_(cfg, grade, it.category, it.focus);
+    var grades = contentGrades_(it.focus, grade, month);
+    var m = matchRow_(cfg, grades, it.category, it.focus);
     if (m.needReview) {
-      review.push({ no: it.no, focus: it.focus, category: it.category, reason: m.reason });
+      review.push({ no: it.no, grades: grades, focus: it.focus, category: it.category, reason: m.reason });
       continue;
     }
     if (m.shadowMismatch) {
@@ -356,7 +409,7 @@ function analyzeReport(payload) {
       var code = m.codes[c];
       var b = byCode[code] = byCode[code] || { code: code, items: [], composite: 0 };
       b.items.push({
-        no: it.no, focus: it.focus, correct: correct, total: it.marks.length,
+        no: it.no, grades: grades, focus: it.focus, correct: correct, total: it.marks.length,
         skills: skills, wrongIdx: wrongIdx, source: m.source, composite: m.codes.length > 1
       });
       if (m.codes.length > 1) b.composite++;
@@ -406,7 +459,7 @@ function analyzeReport(payload) {
         }
       }
     }
-    wrongItems.sort(function(a, b) { return a - b; });
+    wrongItems.sort(itemOrder_);
     perStudent.push({ code: students[si], wrongItems: wrongItems, codes: Object.keys(codeSet) });
   }
 
@@ -421,6 +474,7 @@ function analyzeReport(payload) {
   return {
     ok: true,
     grade: grade,
+    month: month,
     studentCount: students.length,
     itemCount: items.length,
     details: details,
