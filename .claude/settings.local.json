@@ -1,14 +1,14 @@
 {
   "permissions": {
     "allow": [
-      "Bash(cd \"D:/備課ai/英語學扶資源\" && clasp push 2>&1)",
-      "Bash(cd \"D:\\\\備課ai\\\\英語學扶資源\" && clasp push 2>&1)",
-      "Bash(cd \"D:\\\\備課ai\\\\英語學扶資源\" && clasp deploy --deploymentId AKfycbz9yWdBRA26XbOAOsHkOsBwUP6Ul2bw-zCbYaB94z1431R28FVyFZ_xN_FY6Iw_9vYaIg 2>&1)",
-      "Bash(cd \"D:\\\\備課ai\\\\英語學扶資源\" && copy index_scroll.html index_scroll.html.bak)",
-      "Bash(cd \"D:\\\\備課ai\\\\英語學扶資源\" && clasp push 2>&1 && clasp deploy --deploymentId AKfycbz9yWdBRA26XbOAOsHkOsBwUP6Ul2bw-zCbYaB94z1431R28FVyFZ_xN_FY6Iw_9vYaIg 2>&1)",
-      "Bash(cp \"D:\\\\備課ai\\\\英語學扶資源\\\\index_scroll.html.bak2\" \"D:\\\\備課ai\\\\英語學扶資源\\\\index_scroll.html\" && cd \"D:\\\\備課ai\\\\英語學扶資源\" && clasp push 2>&1 && clasp deploy --deploymentId AKfycbz9yWdBRA26XbOAOsHkOsBwUP6Ul2bw-zCbYaB94z1431R28FVyFZ_xN_FY6Iw_9vYaIg 2>&1)",
-      "Bash(cd \"D:/備課ai/英語學扶資源\" && clasp push)",
-      "Bash(cd \"D:/備課ai/英語學扶資源\" && clasp deploy --deploymentId AKfycbz9yWdBRA26XbOAOsHkOsBwUP6Ul2bw-zCbYaB94z1431R28FVyFZ_xN_FY6Iw_9vYaIg)",
+      "Bash(cd \"D:/備課ai/41_英語學扶資源\" && clasp push 2>&1)",
+      "Bash(cd \"D:\\\\備課ai\\\\41_英語學扶資源\" && clasp push 2>&1)",
+      "Bash(cd \"D:\\\\備課ai\\\\41_英語學扶資源\" && clasp deploy --deploymentId AKfycbz9yWdBRA26XbOAOsHkOsBwUP6Ul2bw-zCbYaB94z1431R28FVyFZ_xN_FY6Iw_9vYaIg 2>&1)",
+      "Bash(cd \"D:\\\\備課ai\\\\41_英語學扶資源\" && copy index_scroll.html index_scroll.html.bak)",
+      "Bash(cd \"D:\\\\備課ai\\\\41_英語學扶資源\" && clasp push 2>&1 && clasp deploy --deploymentId AKfycbz9yWdBRA26XbOAOsHkOsBwUP6Ul2bw-zCbYaB94z1431R28FVyFZ_xN_FY6Iw_9vYaIg 2>&1)",
+      "Bash(cp \"D:\\\\備課ai\\\\41_英語學扶資源\\\\index_scroll.html.bak2\" \"D:\\\\備課ai\\\\41_英語學扶資源\\\\index_scroll.html\" && cd \"D:\\\\備課ai\\\\41_英語學扶資源\" && clasp push 2>&1 && clasp deploy --deploymentId AKfycbz9yWdBRA26XbOAOsHkOsBwUP6Ul2bw-zCbYaB94z1431R28FVyFZ_xN_FY6Iw_9vYaIg 2>&1)",
+      "Bash(cd \"D:/備課ai/41_英語學扶資源\" && clasp push)",
+      "Bash(cd \"D:/備課ai/41_英語學扶資源\" && clasp deploy --deploymentId AKfycbz9yWdBRA26XbOAOsHkOsBwUP6Ul2bw-zCbYaB94z1431R28FVyFZ_xN_FY6Iw_9vYaIg)",
       "Bash(python setup_changelog_sheet.py)",
       "Bash(python -X utf8 setup_changelog_sheet.py)",
       "Bash(python -X utf8 read_english_sheet.py)",
@@ -20,7 +20,7 @@
       "Bash(python -X utf8 -m pip show google-auth)",
       "Bash(python -X utf8 -c \"import sys; sys.path.insert\\(0, r'C:\\\\Users\\\\wu\\\\AppData\\\\Local\\\\Packages\\\\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\\\\LocalCache\\\\local-packages\\\\Python313\\\\site-packages'\\); import google.auth; print\\('ok'\\)\")",
       "PowerShell(python \"C:\\\\Users\\\\wu\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\d----ai-------\\\\7c98c87e-f1fb-4de1-b3cb-3c3e99b30a42\\\\scratchpad\\\\dump_items.py\")",
-      "PowerShell($d=\"D:\\\\備課ai\\\\英語學扶資源\\\\data\"; \"== 比對規則\"; Get-Content \"$d\\\\比對規則.csv\" -Encoding UTF8; \"== 指標對應 \\(grade col\\)\"; Import-Csv \"$d\\\\指標對應.csv\" -Encoding UTF8 | Group-Object 年級 | Select Name,Count | Format-Table | Out-String; Import-Csv \"$d\\\\指標對應.csv\" -Encoding UTF8 | ? {$_.年級 -in '三年級','五年級','六年級'} | Select 細項編號,項目,白話標題,對應單元 | Format-Table -AutoSize | Out-String -Width 250; \"== 字詞主題 labels\"; Import-Csv \"$d\\\\字詞主題.csv\" -Encoding UTF8 | Group-Object 年級,主題標籤 | Select Name,Count | Format-Table | Out-String; \"== 主題別名\"; Get-Content \"$d\\\\主題別名.csv\" -Encoding UTF8)"
+      "PowerShell($d=\"D:\\\\備課ai\\\\41_英語學扶資源\\\\data\"; \"== 比對規則\"; Get-Content \"$d\\\\比對規則.csv\" -Encoding UTF8; \"== 指標對應 \\(grade col\\)\"; Import-Csv \"$d\\\\指標對應.csv\" -Encoding UTF8 | Group-Object 年級 | Select Name,Count | Format-Table | Out-String; Import-Csv \"$d\\\\指標對應.csv\" -Encoding UTF8 | ? {$_.年級 -in '三年級','五年級','六年級'} | Select 細項編號,項目,白話標題,對應單元 | Format-Table -AutoSize | Out-String -Width 250; \"== 字詞主題 labels\"; Import-Csv \"$d\\\\字詞主題.csv\" -Encoding UTF8 | Group-Object 年級,主題標籤 | Select Name,Count | Format-Table | Out-String; \"== 主題別名\"; Get-Content \"$d\\\\主題別名.csv\" -Encoding UTF8)"
     ],
     "additionalDirectories": [
       "D:\\備課ai\\google workspace"
