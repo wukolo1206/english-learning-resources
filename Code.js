@@ -1,6 +1,6 @@
 // ====== 版本資訊（部署前務必更新這兩行）======
-var APP_VERSION = '@28';
-var APP_UPDATED = '2026-09-30';
+var APP_VERSION = '@29';
+var APP_UPDATED = '2026-11-12';
 
 // 前端頁尾用
 function getAppInfo() {

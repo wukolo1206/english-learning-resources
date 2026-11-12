@@ -232,49 +232,103 @@ function extractSheet(sheet){
 }
 
 // ---------- 主流程 ----------
+// 可一次選多個檔案；每個「N年級」工作表各自分析，結果上方用按鈕切換年級
+var REPORTS = [];      // [{ label, fileName, target, nameMap, res, error }]
+var CUR = 0;
+
+function callAnalyze(payload){
+  return new Promise(function(resolve, reject){
+    google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).analyzeReport(payload);
+  });
+}
+
+function gradeOrder(label){
+  var m = /(\d)年級/.exec(label);
+  return m ? parseInt(m[1], 10) : 99;
+}
+
 $('run').addEventListener('click', async function(){
-  var f = $('file').files[0];
-  if (!f){ showMsg('請先選擇報表檔案。'); return; }
+  var files = Array.prototype.slice.call($('file').files || []);
+  if (!files.length){ showMsg('請先選擇報表檔案。'); return; }
   $('loading').style.display = 'inline'; showMsg(''); $('result').innerHTML = '';
+  REPORTS = []; CUR = 0; LAST = null; NAME_MAP = {};
+  var problems = [];
   try{
-    var sheets;
-    if (/\.csv$/i.test(f.name)) sheets = parseCsvText(await f.text());
-    else sheets = await parseXlsx(await f.arrayBuffer());
-
-    var parsed = [];
-    for (var i = 0; i < sheets.length; i++){
-      try { parsed.push(extractSheet(sheets[i])); }
-      catch (err){ parsed.push({ grade: sheets[i].name, fatal: err.message }); }
+    var jobs = [];
+    for (var fi = 0; fi < files.length; fi++){
+      var f = files[fi], sheets;
+      try {
+        if (/\.csv$/i.test(f.name)) sheets = parseCsvText(await f.text());
+        else sheets = await parseXlsx(await f.arrayBuffer());
+      } catch (err){ problems.push(f.name + '：' + err.message); continue; }
+      for (var i = 0; i < sheets.length; i++){
+        var p;
+        try { p = extractSheet(sheets[i]); }
+        catch (err){ problems.push(f.name + '／' + sheets[i].name + '：' + err.message); continue; }
+        if (!p.month){
+          var fm = /(20\d{2})(0[1-9]|1[0-2])/.exec(f.name);
+          if (fm) p.month = fm[2];
+        }
+        jobs.push({ fileName: f.name, target: p });
+      }
     }
-    var usable = parsed.filter(function(p){ return !p.fatal; });
-    if (!usable.length) throw new Error(parsed[0].fatal || '報表無法解析。');
+    if (!jobs.length) throw new Error(problems.join('<br>') || '報表無法解析。');
 
-    // 代號化：姓名只留在這裡
-    NAME_MAP = {};
-    var target = usable[0];
-    var codes = target.names.map(function(n, idx){
-      var code = '學生' + (idx + 1);
-      NAME_MAP[code] = n;
-      return code;
-    });
+    // 同一個年級出現不只一次時，按鈕上加檔名區分
+    var cnt = {};
+    jobs.forEach(function(j){ cnt[j.target.grade] = (cnt[j.target.grade] || 0) + 1; });
+    jobs.sort(function(a, b){ return gradeOrder(a.target.grade) - gradeOrder(b.target.grade); });
 
-    if (!target.month){
-      var fm = /(20\d{2})(0[1-9]|1[0-2])/.exec(f.name);
-      if (fm) target.month = fm[2];
+    // 代號化：姓名只留在這個分頁的記憶體，每個年級各自一份對照
+    for (var k = 0; k < jobs.length; k++){
+      var j = jobs[k], nameMap = {};
+      var codes = j.target.names.map(function(n, idx){
+        var code = '學生' + (idx + 1);
+        nameMap[code] = n;
+        return code;
+      });
+      j.nameMap = nameMap;
+      j.label = j.target.grade + (cnt[j.target.grade] > 1 ? '（' + j.fileName.replace(/\.(xlsx|csv)$/i, '') + '）' : '');
+      j.payload = { grade: j.target.grade, month: j.target.month, students: codes, items: j.target.items };
     }
-    var payload = { grade: target.grade, month: target.month, students: codes, items: target.items };
-    var skipped = parsed.filter(function(p){ return p !== target; })
-                        .map(function(p){ return p.grade + (p.fatal ? '（' + p.fatal + '）' : ''); });
 
-    google.script.run
-      .withSuccessHandler(function(res){ $('loading').style.display = 'none'; if (res && res.meta) res.meta.reportName = f.name; render(res, target, skipped); })
-      .withFailureHandler(function(e){ $('loading').style.display = 'none'; showMsg('伺服器錯誤：' + esc(e.message), 'box-err'); })
-      .analyzeReport(payload);
+    var results = await Promise.all(jobs.map(function(j){
+      return callAnalyze(j.payload).then(function(res){
+        if (res && res.meta) res.meta.reportName = j.fileName;
+        return res;
+      }, function(e){ return { ok: false, errors: ['伺服器錯誤：' + e.message] }; });
+    }));
+    for (var r = 0; r < jobs.length; r++){
+      REPORTS.push({ label: jobs[r].label, fileName: jobs[r].fileName, target: jobs[r].target,
+                     nameMap: jobs[r].nameMap, res: results[r] });
+    }
+    $('loading').style.display = 'none';
+    if (problems.length) showMsg('<strong>以下工作表沒有分析：</strong><br>' + problems.map(esc).join('<br>'), 'box-warn');
+    showReport(0);
   } catch (err){
     $('loading').style.display = 'none';
-    showMsg(esc(err.message), 'box-err');
+    showMsg(err.message.split('<br>').map(esc).join('<br>'), 'box-err');
   }
 });
+
+function showReport(i){
+  var rp = REPORTS[i];
+  if (!rp) return;
+  CUR = i;
+  NAME_MAP = rp.nameMap;
+  LAST = null;
+  render(rp.res, rp.target, []);
+  if (i > 0 || REPORTS.length > 1) window.scrollTo({ top: $('result').offsetTop - 10, behavior: 'smooth' });
+}
+
+function tabsHtml(){
+  if (REPORTS.length < 2) return '';
+  var h = '<div class="gtabs noprint"><span class="muted" style="align-self:center">這次共 ' + REPORTS.length + ' 份：</span>';
+  for (var i = 0; i < REPORTS.length; i++){
+    h += '<button class="' + (i === CUR ? 'on' : '') + '" onclick="showReport(' + i + ')">' + esc(REPORTS[i].label) + '</button>';
+  }
+  return h + '</div>';
+}
 
 $('check').addEventListener('click', function(){
   $('loading').style.display = 'inline';
@@ -398,7 +452,7 @@ function gradeNote(grades, sheetGrade){
 }
 
 function render(res, target, skipped){
-  if (!res.ok){ showMsg(res.errors.map(esc).join('<br>'), 'box-err'); return; }
+  if (!res || !res.ok){ $('result').innerHTML = tabsHtml() + '<div class="box-err">' + ((res && res.errors) || ['分析失敗']).map(esc).join('<br>') + '</div>'; return; }
   var n = res.studentCount, h = '';
 
   // ---- 這班最需要補的三件事 ----
@@ -538,7 +592,7 @@ function render(res, target, skipped){
 
   h += '<div class="card noprint"><button class="btn sec" onclick="window.print()">列印／另存 PDF</button></div>';
 
-  $('result').innerHTML = h;
+  $('result').innerHTML = tabsHtml() + h;
 }
 
 // ---------- 課程計畫表 ----------

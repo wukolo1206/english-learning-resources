@@ -22,6 +22,9 @@ main{max-width:1060px;margin:0 auto;padding:18px 16px 40px}
 .btn{background:var(--primary);color:#fff;border:0;border-radius:8px;padding:9px 16px;
   font-size:.9rem;cursor:pointer;font-family:inherit}
 .btn:hover{background:var(--primary-dark)}
+.gtabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.gtabs button{border:1px solid var(--primary);background:#fff;color:var(--primary);border-radius:999px;padding:7px 16px;font:inherit;cursor:pointer}
+.gtabs button.on{background:var(--primary);color:#fff}
 .btn.sec{background:#fff;color:var(--primary);border:1px solid var(--primary)}
 .muted{color:var(--muted);font-size:.84rem}
 .privacy{background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;
@@ -94,10 +97,11 @@ footer{text-align:center;padding:14px 12px 24px;font-size:.78rem;color:var(--mut
 <main>
   <div class="card noprint">
     <h2>1. 選擇報表檔案</h2>
-    <input type="file" id="file" accept=".xlsx,.csv">
+    <input type="file" id="file" accept=".xlsx,.csv" multiple>
     <button class="btn" id="run">產生建議</button>
     <button class="btn sec" id="check">檢查設定</button>
     <span id="loading">處理中…</span>
+    <div class="muted" style="margin-top:6px">不同年級的報表可以一起選（按住 Ctrl 多選），會各自產生建議，結果上方可以切換年級。</div>
     <div class="privacy">
       <strong>學生姓名不會離開這台電腦。</strong>
       檔案在你的瀏覽器裡解析，姓名就地換成「學生1、學生2…」後才送出計算；
