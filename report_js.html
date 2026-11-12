@@ -451,6 +451,15 @@ function gradeNote(grades, sheetGrade){
   return grades.map(function(g){ return cn[g] || g; }).join('、') + '年級內容・';
 }
 
+// 答對情形的白話說法：只有 1 位學生時講題數；只有 1 題時講人數；其他講平均每題幾人（取到小數一位，避免 0.3 人被寫成 0 人）
+function correctText(d, n){
+  var k = d.items.length;
+  if (n === 1) return k + ' 題中答對 ' + d.correct + ' 題';
+  if (k === 1) return n + ' 人中 ' + d.correct + ' 人答對';
+  var avg = Math.round(d.correct / k * 10) / 10;
+  return '共 ' + k + ' 題，' + n + ' 人中平均每題 ' + avg + ' 人答對';
+}
+
 function render(res, target, skipped){
   if (!res || !res.ok){ $('result').innerHTML = tabsHtml() + '<div class="box-err">' + ((res && res.errors) || ['分析失敗']).map(esc).join('<br>') + '</div>'; return; }
   var n = res.studentCount, h = '';
@@ -463,8 +472,7 @@ function render(res, target, skipped){
   for (var t = 0; t < top.length; t++){
     var d0 = top[t];
     h += '<li><strong>' + esc(d0.plain) + '</strong><br>' +
-         '<span class="muted">' + n + ' 人中平均 ' + Math.round(d0.correct / d0.items.length) +
-         ' 人答對（' + pct(d0.rate) + '）' +
+         '<span class="muted">' + correctText(d0, n) + '（' + pct(d0.rate) + '）' +
          (d0.singleItem ? '，只有 1 題，僅供參考' : '') + '</span></li>';
   }
   h += '</ol><p class="muted">下面每一項都可以點開，裡面有這題考什麼、以及可以用的教材。</p></div>';
@@ -480,7 +488,7 @@ function render(res, target, skipped){
     var bar = Math.round(d.rate * 100);
     h += '<details class="ind"' + (i < 3 ? ' open' : '') + '><summary>' +
          '<div class="sum-line"><span class="plain">' + esc(d.plain) + '</span>' +
-         '<span class="score">' + d.correct + '／' + d.total + ' 人次答對（' + pct(d.rate) + '）</span></div>' +
+         '<span class="score">' + (n === 1 ? '答對 ' + d.correct + '／' + d.total + ' 題' : d.correct + '／' + d.total + ' 人次答對') + '（' + pct(d.rate) + '）</span></div>' +
          '<div class="bar"><i style="width:' + bar + '%"></i></div>' +
          '<div class="flags">' + flags + '<span class="code">' + esc(d.code) + '</span></div>' +
          '</summary><div class="ind-body">';

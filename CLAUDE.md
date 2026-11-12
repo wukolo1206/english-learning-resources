@@ -2,9 +2,9 @@
 project: 英語學扶資源
 category: GAS學習扶助
 status: 維護中
-version: "@29"
+version: "@30"
 url: https://script.google.com/macros/s/AKfycbz9yWdBRA26XbOAOsHkOsBwUP6Ul2bw-zCbYaB94z1431R28FVyFZ_xN_FY6Iw_9vYaIg/exec
-next_action: "@29 報表建議可一次分析多個年級；研習回饋待處理：Wordwall 改原始網址、Google 搜尋入口頁"
+next_action: "@30 報表建議可一次分析多個年級、答對說法修正；研習回饋待處理：Wordwall 改原始網址、Google 搜尋入口頁"
 updated: 2026-11-12
 ---
 
